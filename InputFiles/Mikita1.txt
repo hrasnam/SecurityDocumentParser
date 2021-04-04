@@ -1,0 +1,3555 @@
+STMicroelectronics
+
+J-TACHO_SecurityTarget_Lite Rev. B
+05 April 2019
+
+J-TACHO_SecurityTarget_Lite
+
+BLANK
+
+J-TACHO_SecurityTarget_Lite
+
+J-TACHO
+Security Target Public Version
+
+1. INTRODUCTION
+1.1
+
+Document Reference
+Document identification: J-TACHO Security Target - Public Version
+Revision: B
+Registration: J-TACHO_SecurityTarget_Lite
+
+1.2
+
+Security Target Reference
+Document identification: J-TACHO Security Target
+Revision: F
+Registration: J-TACHO Security Target
+
+1.3
+
+TOE Reference
+
+
+TOE Name and Version: J-Tacho v.1.2.6
+
+2. SCOPE
+This document is a sanitized version of the Security Target used for the evaluation. It is classified as public
+information.
+
+J-TACHO_SecurityTarget_Lite
+
+INDEX
+Page
+
+SCOPE
+4.
+5.
+
+DEFINITIONS
+J-TACHO Security Target
+5.1
+ST Introduction
+5.1.1
+Security Target Reference
+5.1.2
+TOE Reference
+5.1.3
+Purpose
+5.1.4
+TOE overview
+
+5.1.9
+6.1
+6.2
+6.3
+6.4
+
+TOE Life-Cycle
+
+CC Conformance Claim
+Protection Profile Claim
+Package Claim
+Conformance Claim Rationale
+
+7.1
+Assets
+7.2
+Subjects and external entities
+7.3
+Threats
+7.4
+Organizational Security Policies
+7.5
+Assumptions
+7.6
+Security objectives (ASE_OBJ)
+7.6.1
+Security objectives for the TOE
+7.6.2
+Security objectives for the operational environment
+7.6.3
+Security objectives rationale
+7.7
+
+Statement of Compatibility concerning Composite Security Target (ASE_COMP)
+
+8.1
+8.2
+
+Definition of Family FCS_RNG
+Definition of Family FPT_EMS
+
+9.1
+
+Security functional requirements for the Tachograph Card
+
+9.2
+
+Security functional requirements for external communications (2nd Generation)
+
+J-TACHO_SecurityTarget_Lite
+
+9.3
+
+Security functional requirements for external communications (1st generation)
+
+9.4
+9.5
+9.6
+
+TOE Security assurance requirements
+Security assurance requirements rationale
+Security requirements rationale
+
+9.7
+
+Security requirements – internal consistency
+
+10.1
+
+Statement of the TOE security functionality
+SF_Auth
+SF_SM
+SF_AC Access Control
+SF_KCS
+SF_DProt
+SF_OSPlat
+TOE summary specification rationale
+
+10.2
+
+J-TACHO_SecurityTarget_Lite
+
+List of tables
+
+Table 11 - Platform
+Table 12 - Platform
+Table 13 - Platform
+Table 14 - Platform
+
+SFRs VS Composite TOE SFRs
+Objectives VS Composite TOE Objectives
+OEs VS Composite TOE OEs
+SARs VS Composite TOE SARs
+
+Table 20: Coverage of security objectives for the TOE by SFRs
+Table 21: Suitability of the SFRs
+Table 22 - Mapping of Security Functional Requirements (SFRs) on TOE Security Functions (TSFs)
+
+List of figures
+
+J-TACHO_SecurityTarget_Lite
+
+3.
+
+REFERENCE DOCUMENTS
+
+[CC1]
+
+Common Criteria for Information Technology Security Evaluation, Part 1: Introduction
+and general model. Version 3.1. Revision 5. April 2017. CCMB-2017-04-001.
+
+[CC2]
+
+Common Criteria for Information Technology Security Evaluation, Part 2: Security
+functional requirements. Version 3.1. Revision 5. April 2017. CCMB-2017-04-002.
+
+[CC3]
+
+Common Criteria for Information Technology Security Evaluation, Part 3: Security
+assurance requirements. Version 3.1. Revision 5. April 2017. CCMB-2017-04-003.
+
+[CEM]
+
+Common Methodology for Information Technology Security Evaluation, Evaluation
+Methodology. Version 3.1. Revision 5. April 2017. CEM-2017-04-004.
+
+[PP_TACHO]
+
+Digital Tachograph – Tachograph Card (TC PP) – BSI-CC-PP-0091-2017, Version 1.0
+
+[EU_2016_165]
+
+Commission Implementing Regulation (EU) 2016/799 of 18 March 2016 implementing
+Regulation (EU) 165/2014 of the European Parliament and of the Council laying down
+the requirements for the construction, testing, installation, operation and repair of
+tachographs and their components.
+
+[EC1360_2002]
+
+Commission Regulation (EC) No. 1360/2002 ‘Requirements for construction, testing,
+installation and inspection’, 05.08.2002, Annex 1B, and last amended by CR (EC) No.
+432/2004 and corrigendum dated as of 13.03.2004 (OJ L 71).
+
+[RNG_FUNC_CLA] A proposal for: Functionality classes for random number generators, Wolfgang Killmann
+(T-Systems) and Werner Schindler (BSI), Version 2.0, 18 September 2011.
+[JCVM3]
+
+Java Card Platform, versions 3.0 (March 2008), 3.0.1 (April 2009) and 3.0.4 (September
+2011), Classic Edition, Virtual Machine (Java Card VM) Specification. Published by Sun
+Microsystems, Inc.
+
+[JCAPI3]
+
+Java Card Platform, versions 3.0 (March 2008), 3.0.1 (April 2009) and 3.0.4 (September
+2011), Classic Edition, Application Programming Interface, March 2008. Published by
+Sun Microsystems, Inc.
+
+[JCRE3]
+
+Java Card Platform, versions 3.0 (March 2008), 3.0.1 (April 2009) and 3.0.4 (September
+2011), Classic Edition, Runtime Environment (Java Card RE) Specification. March
+2008. Published by Sun Microsystems, Inc.
+
+[GP221]
+
+GlobalPlatform Card Specification, Version 2.2.1, January 2011.
+
+[PP_JC_Closed]
+
+Java Card System – Closed Configuration Protection Profile, Version 3.0, December
+2012 [ANSSI-CC-PP-2010/07-M01]
+
+[PP_0035]
+
+Security IC Platform Protection Profile, Version 1.0, 15 July 2007.
+
+[BSI_ PP_0084]
+
+BSI-CC-PP-0084-2014 – Eurosmart – Security IC Platform Protection Profile with
+Augmentation Packages.
+
+[STLite_ST31G480] ST31G480 D01 including optional cryptographic library NESLIB, and optional
+technologies MIFARE DESFIRE EV1 and MIFARE PLUS X Security Target for
+composition, Rev D01.3, October 2018.
+
+J-TACHO_SecurityTarget_Lite
+
+[BSI_AIS20]
+
+Functionality classes and evaluation methodology for deterministic random number
+generators, BSI, Version 1, 02-12-1999
+
+[BSI_AIS20/AIS31] A proposal for: Functionality classes for random number generators, W. Killmann & W.
+Schindler, BSI, Version 2.0, 18 September 2011
+[NIST_800-22]
+
+National Institute of Standards and Technology, A Statistical Test Suite for Random and
+Pseudorandom Number Generators for Cryptographic Applications Special Publication
+800-22 Rev.1a April 2010
+
+[Tacho_AGD_OPE] J-TACHO Operational User Guidance v1
+[Tacho_AGD_PRE] J-TACHO Preparative Procedure v1
+
+J-TACHO_SecurityTarget_Lite
+
+4.
+
+DEFINITIONS
+Term
+0x
+A.XXX
+AID
+
+APDU
+
+APDU buffer
+
+Applet
+
+CAD
+
+CAP file
+
+CC
+Class
+
+Meaning
+C-fashion hexadecimal prefix
+Assumption
+Application identifier, an ISO-7816 data format used for unique
+identification of Java Card applets (and certain kinds of files in
+card file systems). The Java Card platform uses the AID data
+format to identify applets and packages. AIDs are administered
+by the International Opens Organization (ISO), so they can be
+used as unique identifiers.
+AIDs are also used in the security policies (see “Context”
+below): applets’ AIDs are related to the selection mechanisms,
+packages’ AIDs are used in the enforcement of the firewall.
+Note: although they serve different purposes, they share the
+same namespace.
+Application Protocol Data Unit, an ISO 7816-4 defined
+communication format between the card and the off-card
+applications. Cards receive requests for service from the CAD
+in the form of APDUs. These are encapsulated in Java Card
+System by the javacard.framework.APDU class ( [JCAPI3]).
+APDUs manage both the selection-cycle of the applets (through
+Java Card RE mediation) and the communication with the
+Currently selected applet.
+The APDU buffer is the buffer where the messages sent
+(received) by the card depart from (arrive to). The Java Card
+RE owns an APDU object (which is a Java Card RE Entry Point
+and an instance if the javacard.framework.APDU class) that
+encapsulates APDU messages in an internal byte array, called
+the APDU buffer. This object is made accessible to the
+currently selected applet when needed, but any permanent
+access (out-of selection-scope) is strictly prohibited for security
+reasons.
+The name given to any Java Card technology-based
+application. An applet is the basic piece of code that can be
+selected for execution from outside the card. Each applet on
+the card is uniquely identified by its AID.
+Card Acceptance Device or card reader. The device where the
+card is inserted, and which is used to communicate with the
+card. Unless explicitly said otherwise, in this document, CAD
+covers PCD.
+A file in the Converted applet format. A CAP file contains a
+binary representation of a package of classes that can be
+installed on a device and used to execute the package’s
+classes on a Java Card virtual machine. A CAP file can contain
+a user library, or the code of one or more applets.
+Common Criteria
+In object-oriented programming languages, a class is a
+prototype for an object. A class may also be considered as a
+set of objects that share a common structure and behavior.
+Each class declares a collection of fields and methods
+associated to its instances. The contents of the fields determine
+the internal state of a class instance, and the methods the
+operations that can be applied to it.
+Classes are ordered within a class hierarchy. A class declared
+as a specialization (a subclass) of another class (its super
+class) inherits all the fields and methods of the latter.
+Java platform classes should not be confused with the classes
+
+J-TACHO_SecurityTarget_Lite
+
+CM
+Context
+
+Current Context
+
+Currently Selected
+Applet
+
+Default Applet
+
+DPA
+
+EAL
+Embedded Software
+ES
+Firewall
+
+HAL
+IC
+Installer
+
+of the functional requirements (FIA) defined in the CC.
+Card Manager
+A context is an object-space partition associated to a package.
+Applets within the same Java technology-based package
+belong to the same context. The firewall is the boundary
+between contexts (see “Current context”).
+The Java Card RE keeps track of the current Java Card System
+context (also called “the active context”). When a virtual method
+is invoked on an object, and a context switch is required and
+permitted, the current context is changed to correspond to the
+context of the applet that owns the object. When that method
+returns, the previous context is restored. Invocations of static
+methods have no effect on the current context. The current
+context and sharing status of an object together determine if
+access to an object is permissible.
+The applet has been selected for execution in the current
+session. The Java Card RE keeps track of the currently
+selected Java Card applet. Upon receiving a SELECT
+command from the CAD or PCD with this applet’s AID, the Java
+Card RE makes this applet the currently selected applet over
+the I/O interface that received the command. The Java Card RE
+sends all further APDU commands received over each interface
+to the currently selected applet on this interface ( [JCRE3],
+Glossary).
+The applet that is selected after a card reset or upon
+completion of the PICC activation sequence on the contactless
+interface ([JCRE3], §4.1)
+Differential Power Analysis is a form of side channel attack in
+which an attacker studies the power consumption of a
+cryptographic hardware device such as a smart card.
+Evaluation Assurance Level
+Pre-issuance loaded software.
+Embedded Software
+The mechanism in the Java Card technology for ensuring
+applet isolation and object sharing. The firewall prevents an
+applet in one context from unauthorized access to objects
+owned by the Java Card RE or by an applet in another context.
+Hardware Abstraction Layer
+Integrated Circuit
+The installer is the on-card application responsible for the
+installation of applets on the card. It may perform (or delegate)
+mandatory security checks according to the card issuer policy
+(for bytecode-verification, for instance), loads and link packages
+(CAP file(s)) on the card to a suitable form for the Java Card
+VM to execute the code they contain. It is a subsystem of what
+is usually called “card manager”; as such, it can be seen as the
+portion of the card manager that belongs to the TOE.
+The installer has an AID that uniquely identifies him, and may
+be implemented as a Java Card applet. However, it is granted
+specific privileges on an implementation-specific manner
+([JCRE3],§10). The installer is the on-card application
+responsible for the installation of applets on the card. It may
+perform (or delegate) mandatory security checks according to
+the card issuer policy (for bytecode-verification, for instance),
+loads and link packages (CAP file(s)) on the card to a suitable
+form for the Java Card VM to execute the code they contain. It
+is a subsystem of what is usually called “card manager”; as
+such, it can be seen as the portion of the card manager that
+belongs to the TOE.
+
+J-TACHO_SecurityTarget_Lite
+
+Interface
+
+Java Card RE
+
+Java Card RE Entry
+Point
+
+Java Card RMI
+
+Java Card System
+Java Card VM
+
+Logical Channel
+
+NVRAM
+O.xxx
+Object Deletion
+
+OE.xxx
+OSP.xxx
+Package
+
+The installer has an AID that uniquely identifies him, and may
+be implemented as a Java Card applet. However, it is granted
+specific privileges on an implementation-specific manner
+([JCRE3],§10).
+A special kind of Java programming language class, which
+declares methods, but provides no implementation for them. A
+class may be declared as being the implementation of an
+interface, and in this case must contain an implementation for
+each of the methods declared by the interface (See also
+shareable interface).
+The runtime environment under which Java programs in a
+smart card are executed. It is in charge of all the management
+features such as applet lifetime, applet isolation, object sharing,
+applet loading, applet initializing, transient objects, the
+transaction mechanism and so on.
+An object owned by the Java Card RE context but accessible
+by any application. These methods are the gateways through
+which applets request privileged Java Card RE services: the
+instance methods associated to those objects may be invoked
+from any context, and when that occurs, a context switch to the
+Java Card RE context is performed.
+There are two categories of Java Card RE Entry Point Objects:
+Temporary ones and Permanent ones. As part of the firewall
+functionality, the Java Card RE detects and restricts attempts to
+store references to these objects.
+Java Card Remote Method Invocation is the Java Card System
+version 2.2 and 3 Classic Edition mechanism enabling a client
+application running on the CAD platform to invoke a method on
+a remote object on the card. Notice that in Java Card System,
+version 2.1.1, the only method that may be invoked from the
+CAD is the process method of the applet class.
+Java Card System includes the Java Card RE, the Java Card
+VM, the Java Card API and the installer.
+The embedded interpreter of bytecodes. The Java Card VM is
+the component that enforces separation between applications
+(firewall) and enables secure data sharing.
+A logical link to an application on the card. A new feature of the
+Java Card System, version 2.2 and 3 Classic Edition, that
+enables the opening of simultaneous sessions with the card,
+one per logical channel. Commands issued to a specific logical
+channel are forwarded to the active applet on that logical
+channel. Java Card platform, version 2.2.2 and 3 Classic
+Edition, enables opening up to twenty logical channels over
+each I/O interface (contacted or contactless).
+Non-Volatile Random Access Memory, a type of memory that
+retains its contents when power is turned off.
+Security objectives for the TOE.
+The Java Card System version 2.2 and 3 Classic Edition
+mechanism ensures that any unreferenced persistent
+(transient) object owned by the current context is deleted. The
+associated memory space is recovered for reuse prior to the
+next card reset.
+Security objectives for the environment.
+Organizational security policies.
+A package is a namespace within the Java programming
+language that may contain classes and interfaces. A package
+defines either a user library, or one or more applet definitions. A
+package is divided in two sets of files: export files (which
+exclusively contain the public interface information for an entire
+
+J-TACHO_SecurityTarget_Lite
+
+PCD
+PICC
+PP
+RAM
+ROM
+SC
+SCP
+SF.xxx
+Shareable Interface
+
+SIO
+ST
+Subject
+
+TOE
+Transient Object
+
+User
+
+VM
+
+package of classes, for external linking purposes; export files
+are not used directly in a Java Card virtual machine) and CAP
+files.
+Proximity Coupling Device. The PCD is a contactless card
+reader device.
+Proximity Card. The PICC is a card with contactless
+capabilities.
+Protection Profile.
+Random Access Memory, is a type of computer memory that
+can be accessed randomly.
+Read Only Memory.
+Smart Card
+Smart Card Platform.It is comprised of the integrated circuit, the
+operating system and the dedicated software of the smart card.
+Security Functionality
+An interface declaring a collection of methods that an applet
+accepts to share with other applets. These interface methods
+can be invoked from an applet in a context different from the
+context of the object implementing the methods, thus
+“traversing” the firewall.
+An object of a class implementing a shareable interface.
+Security Target
+An active entity within the TOE that causes information to flow
+among objects or change the system’s status. It usually acts on
+behalf of a user. Objects can be active and thus are also
+subjects of the TOE.
+Target Of Evaluation
+An object whose contents are not preserved across CAD
+sessions. The contents of these objects are cleared at the end
+of the current CAD session or when a card reset is performed.
+Writes to the fields of a transient object are not affected by
+transactions.
+Any application interpretable by the Java Card RE. That also
+covers the packages. The associated subject(s), if applicable, is
+(are) an object(s) belonging to the javacard.framework.applet
+class.
+Virtual Machine
+
+J-TACHO_SecurityTarget_Lite
+
+5.
+
+J-TACHO Security Target
+5.1
+
+5.1.1
+
+ST Introduction
+
+Security Target Reference
+Document identification: J-Tacho Security Target
+Revision:
+F
+Date: 03 April 2019
+Registration: J-Tacho Security Target
+
+5.1.2
+
+TOE Reference
+TOE Name and Version: J-Tacho v.1.2.6
+TOE short Name: J-Tacho
+The TOE comprises the following items:
+ The Tachograph Application - package version 1.13
+ J-SAFE3 Java Card Platform (including the native Operating System) v1.2.6
+ Hardware: ST31G480 D01 (available formats are listed in 5.1.6).
+ J-TACHO – Operational User Guidance [Tacho_AGD_OPE]
+ J-TACHO – Preparative Procedure [Tacho_AGD_PRE]
+
+5.1.3
+
+Purpose
+This document details the Security Target of J-TACHO: STMicroelectronics Tachograph
+application: a EAL4+ certified a Digital Tachograph Card based on the requirements and
+recommendations of the EU regulation 165/2014, on top of J-SAFE3 Java Card Platform and
+designed on certified IC ST31G480 platform (ST31G480 D01 including optional
+cryptographic library NESLIB, V.6.2.1) (see [STLite_ST31G480].
+The precise description of the Target of Evaluation (TOE) and the related features are given
+in next sections.
+A glossary of terms and abbreviations used in this document is given in chapter 4.
+The Security Target conforms to the Protection Profile: Digital Tachograph – Tachograph
+Card [PP_TACHO].
+
+5.1.4
+
+TOE overview
+The TOE is the micro-module made of the Integrated Circuit (IC) and its embedded software.
+Embedded Software includes J-SAFE3 Java Card platform and the Tachograph Application
+(both First and Second Generation). It includes the associated embedded data of the smart
+card working on the micro-controller unit in accordance with the functional specifications.
+This Security Target defines security objectives and security requirements for the Digital
+Tachograph Card based on the requirements and recommendations of the EU Regulation
+165/2014. The main security objective is to provide the secure enforcing functions and
+mechanisms to maintain the integrity and confidentiality of the Tachograph application and
+data during its life cycle.
+Detailed description of the TOE, of its security functionalities, its security features, its security
+environment,
+
+J-TACHO_SecurityTarget_Lite
+
+5.1.5
+
+TOE TYPE
+The Target of Evaluation detailed in this Security Target is STM Tachograph Application JTacho (from now on also referenced as the TOE).
+The TOE is constituted by the following blocks:
+ The Tachograph Application - (including 1st and 2nd generation application
+functionalities)
+ J-SAFE3 Java Card Platform (including the native Operating System, providing to
+the Java Card System a low-level support of hardware functionalities and
+implementing I/O communication);
+ The hardware IC and its associated crypto library (already certified as ST31G480
+D01 including optional crypto library NESLIB V.6.2.1) (see [STLite_ST31G480]).
+The TOE is compliant with Global Platform 2.2.1 standard [GP221] which provides a set of
+APIs and technologies to perform in a secure way the operations involved in the
+management of the applications hosted by the card.
+Being J-TACHO a closed product, card content management interface is permanently
+disabled before card delivery.
+After TOE delivery GP functionality is available for TOE Identification.
+Besides, only the API subset related to life-cycle management of card and J-TACHO
+application are considered as part of the TOE, while all other GP API and the Card Manager
+application belongs to the TOE environment and are not in the scope of current evaluation.
+
+driver card, workshop card, control card or company card
+[EU_2016_165]
+
+5.1.6
+
+TOE Boundaries
+Physical Boundaries
+The TOE is constituted by hardware and software parts and is available in several formats
+depending on the product end usage:
+ Contact-only card (IC packaged as micro-module and embedded in a plastic card
+body)
+ IC packaged in several module formats for integration on PCBs or plastic cards)
+ Wafers or sawn wafers (e.g.: to be embedded by third parties)
+
+Logical Boundaries
+The Target of Evaluation (TOE) is composed of the Java Card J-TACHO, a Digital
+Tachograph Application, the Java Card smart card platform and the IC.
+
+J-TACHO_SecurityTarget_Lite
+
+J-TACHO
+
+J-SAFE3 JC Platform
+
+ST31G480 D01
+
+5.1.7
+
+Hardware IC and dedicated crypto library
+The basis of this composite evaluation is the STMicroelectronics’ ST31G480 certified
+Secured Microcontroller plus the NesLib v.6.2.1 crypto-library.
+The ST31G480 Secure Microcontroller with Cryptographic Library has been certified by
+ANSSI (cert. report ANSSI-CC-2019/12) with assurance level EAL5+: its associated Security
+Target Lite is [STLite_ST31G480].
+NOTE: Even though the TOE includes the IC and the crypto-library, not all the functionalities
+of the IC and crypto-library are used.
+NOTE:
+
+5.1.8
+
+TOE FUNCTIONALITIES
+The TOE
+
+
+
+The TOE
+
+
+
+
+
+J-TACHO_SecurityTarget_Lite
+
+
+
+
+
+
+
+
+
+
+[EU_2016_165]
+
+[EU_2016_165]
+[EU_2016_165]
+
+Driver cards
+Workshop cards
+
+Control cards
+
+[PP_TACHO]
+
+
+
+
+
+
+
+
+
+communication protocols:
+o ISO 7816 T=0 (direct and inverse convention)
+o ISO 7816 T=1 (direct and inverse convention)
+o Extended Length APDUs (Only T=1)
+Cryptographic functionalities:
+o 3-DES (112 and 168 bit keys) for encryption/decryption in ECB and CBC mode,
+MAC generation and verification (CBC-MAC, Retail-MAC)
+o AES (key length 128, 192, 256) for encryption/decryption in ECB and CBC mode,
+MAC generation and verification (CBC-MAC, CMAC)
+o RSA (with keys up to 2048 bits) for encryption/decryption, signature verification,
+key generation in both Standard and CRT mode.
+o Message Digest with SHA-1, SHA-224, SHA-256, SHA384, SHA-512 algorithms
+o Elliptic Curve cryptography over GF(p) for key length between 112 and 521 bits
+o Diffie-Hellman and EC Diffie-Hellman key agreement algorithms
+o Secure random number generation mechanisms compliant to PTG.2 Class and
+DRG.3 Class defined in [BSI_AIS20/AIS31].
+JC functionalities compliant with [PP_JC_Closed]:
+o Logical Channel awareness (only Basic Logical Channel is supported)
+o Object Deletion (garbage collection) with memory reclamation
+o Application loading, linking and installation operations limited to pre-delivery
+phase in a controlled environment
+Proprietary functionalities:
+o Key Agreement based on Discrete Logarithm (Diffie-Hellmann)
+
+J-TACHO_SecurityTarget_Lite
+
+o
+o
+o
+o
+o
+
+5.1.9
+
+Stateless (one-shot) ECDSA, RSA and Digest operations
+Optimized handling of EC Curve parameters among EC Keys
+Secure Storage API (integrity-protected arrays)
+Secure comparison of byte arrays
+Generation of random primes
+
+TOE Life-Cycle
+The TOE life cycle, i.e. the OS, the Java Card platform and the J-TACHO application, spans
+from product development phase to its operational phase/usage by the final user. The TOE
+life cycle is fully conform to the claimed PP. The TOE life cycle phases are those detailed in
+. We refer to IC Protection Profile [PP_0035] and [BSI_ PP_0084] for a thorough
+description of
+Phases 1 to 7:
+
+Phases 1 Embedded Software (Native OS, Java Card System, other platform
+components such as Card Manager, J-TACHO Applets).
+
+Phases 2 IC development (IC with Dedicated Software and NesLib v.6.2.1
+Cryptographic Library)
+
+Phase 3 and 4 IC manufacturing, packaging and testing. Some IC prepersonalization steps may occur in Phase 3.
+
+Phase 5 TOE Product Finishing Process concerns with the embedding of software
+components within the IC.
+
+Phase 6 is dedicated to the TOE personalization prior final use.
+
+Phase 7 is the TOE operational phase.
+The TOE life cycle is composed of four stages:
+
+Development,
+
+Storage, pre-personalization and testing
+
+Personalization
+
+Usage.
+The following entities and roles are identified:
+TOE Developer: STMicroelectronics srl, Marcianise (CE) Italy
+IC Manufacturer: STMicroelectronics SAS, Rousset France
+TOE Personalization Agent: Public administration or National
+personalization center enabled to issue personalized Tachograph card.
+
+J-TACHO_SecurityTarget_Lite
+
+accredited
+
+TOE
+
+Phase 1:
+TOE development is performed during Phase 1. This includes OS, Java card system
+platform (JCS) and J-Tacho application, design, implementation, testing and documentation.
+The TOE development fulfils requirements of the final product, including conformance to
+product specifications (e.g. Java Card, GlobalPlatform, [EU_2016_165], etc…), and
+recommendations of the guidelines of IC, crypto-library and J-SAFE3. The TOE development
+occurs in a controlled environment that avoids disclosure of source code, data and any
+critical documentation and that guarantees the integrity of these elements.
+TOE Development is performed by STMicroelectronics S.r.l in the site of M ARCIANISE
+(ITALY).
+Phase2, Phase 3 and Phase 4:
+In Phase 3, the Security IC Manufacturer may store, pre-personalize the TOE and potentially
+conduct tests on behalf of the TOE developer. This support is specifically used when the
+TOE delivery shall be done by IC Manufacturer at the end of phase 5: in this case the TOE
+Developer may deliver in a secure way to IC Manufacturer a NVM image of final product
+configuration. On its turn, the IC Manufacturer can perform complete TOE prepersonalization on behalf of TOE Developer using the NVM image in order to obtain a fully
+operational TOE. The IC Manufacturing environment shall protect the integrity and
+confidentiality of the TOE and of any related material, for instance test suites.
+The IC Development is performed by STMicroelectronics SAS Rousset (FRANCE).
+
+Phase 5:
+The Phase 5 composite product integration is identical to the Phase 5 Smart Card Product
+Finishing Process in [PP_TACHO].
+TOE Developer and/or the IC Manufacturer act as Composite Product Integrator.
+The Composite Product Integrator shall initialize and pre-personalize the TOE by configuring
+it according to product needs, then it shall download the J-Tacho application on top of the
+JCS and finally it shall permanently disable card content management features (e.g. OS
+
+J-TACHO_SecurityTarget_Lite
+
+lock, disable card manager), thus making the TOE fully operational and ready for the
+delivery.
+The delivery of the TOE occurs at the end of Phase 5 Composite Product Integration.
+Delivery and acceptance procedures shall guarantee the authenticity, the confidentiality and
+integrity of the TOE.
+Being the Composite Product Integrator’s environment the same as the TOE Developer/IC
+Manufacturer, integrity and confidentiality of the TOE and of any related material are also
+guaranteed.
+The TOE Composite Product Integration is performed by STMicroelectronics S.r.l in the
+site of M ARCIANISE (ITALY) and/or STMicroelectronics SAS Rousset (FRANCE).
+
+Phase 6:
+In Phase 6, the applet J-TACHO of the final product, which have been installed on the TOE
+in Phase 5, can be further personalized with the creation of the application file structure
+defined in [EU_2016_165] and with end user data.
+The TOE can be used as a Tachograph Card (driver card, workshop card, control card or
+company card) only after its personalisation, in which application data including Tachograph
+Card specific cryptographic keys are stored.
+The TOE Personalization agent has to follow the procedure as described in
+Tacho_AGD_PRE to authenticate the role and for TOE personalization.
+The TOE Personalization agent is a Public administration or National accredited TOE
+personalization center enabled to issue personalized Tachograph card.
+
+Phase 7:
+The TOE final usage environment coincides with the environment of the product where the
+TOE is embedded in. It covers a wide spectrum of situations that cannot be covered by
+evaluations and, therefore, the TOE and the product shall provide the full set of security
+functionalities to avoid abuse of the product by un-trusted entities.
+Notes on current evaluation:
+ Current evaluation process covers phases from 1 to 5,
+ The TOE delivery is done by the below entities at the end of phase 5 before TOE
+personalization:
+o on behalf of STMicroelectronics S.r.l., M ARCIANISE by qualified ST production sites
+(see [STLite_ST31G480] STMicroelectronics SAS Rousset)
+o by STMicroelectronics S.r.l., M ARCIANISE
+ TOE delivery comprises the following items:
+ Hardware: ST31G480 D01 (available formats are listed in 5.1.6).
+ J-SAFE3 Java Card Platform v2.1.6 (including the native Operating System)
+ The Tachograph Application - (1st and 2nd generation) – applet J-TACHO
+ J-TACHO Operational User Guidance v1 [Tacho_AGD_OPE]
+ J-TACHO Preparative Procedure v1 [Tacho_AGD_PRE]
+The delivery is protected by secured transport and tracking measures. TOE identification
+procedures are described in the guidance documents Tacho_AGD_PRE.
+
+J-TACHO_SecurityTarget_Lite
+
+Product Phase
+Development
+
+TOE Life Cycle Phase
+Phase 1
+
+Manufacturing
+
+Phase 2,
+Phase 3,
+
+Responsible
+TOE Developer
+STMicroelectronics S.r.l., M ARCIANISE
+IC Manufacturer
+STMicroelectronics SAS Rousset
+
+Phase 4,
+Storage, pre-
+
+Phase 5
+
+TOE Developer or IC Manufacturer
+
+personalization
+
+STMicroelectronics S.r.l., M ARCIANISE
+
+and testing
+
+STMicroelectronics SAS Rousset
+
+Personalization
+
+Phase 6
+
+Usage
+
+Phase 7
+
+Personalizer
+Public
+administration
+or
+National
+accredited TOE personalization center.
+End User
+
+Table 1: TOE life cycle, entities and roles
+
+J-TACHO_SecurityTarget_Lite
+
+6.
+
+Conformance Claims (ASE_CCL)
+6.1
+
+CC Conformance Claim
+
+This Security Target claims conformance to:
+
+
+Common Criteria for Information Technology Security Evaluation, Part 1: Introduction and
+General Model; Version 3.1, Revision 5. April 2017 ,
+
+
+
+Common Criteria for Information Technology Security Evaluation, Part 2: Security Functional
+Components; Version 3.1, Revision 5. April 2017,
+
+
+
+Common Criteria for Information Technology Security Evaluation, Part 3: Security Assurance
+Requirements; Version 3.1, Revision 5. April 2017
+
+as follows:
+
+
+Part 2 extended with FCS_RNG.1 and FPT_EMS.1
+
+
+
+Part 3 conformant EAL4 augmented by ATE_DPT.2 and AVA_VAN.5
+
+6.2
+
+Protection Profile Claim
+
+This ST claims strict conformance to the PP:
+
+
+
+6.3
+
+Digital Tachograph – Tachograph Card (TC PP) – BSI-CC-PP-0091-2017, Version 1.0
+[PP_TACHO] and extends the TOE security functionality to address the authentication of the
+Personalization Agent after delivery, as allowed by the PP. The impacted SFRs are the
+following: FDP_ACC.2.1, FDP_ACF.1.1, FDP_ACF.1.2 and FDP_UID.2.1.
+
+Package Claim
+This protection profile claims conformance to the assurance package defined in
+[EU_2016_165] Annex 1C, Appendix 10, as follows:
+“SEC_006 The assurance level for each Protection Profile shall be EAL4 augmented by the
+assurance components ATE_DPT.2 and AVA_VAN.5”.
+
+6.4
+
+Conformance Claim Rationale
+This Security Target claims strict conformance to the protection profiles Digital Tachograph –
+Tachograph Card (TC PP) – BSI-CC-PP-0091-2017, Version 1.0 [PP_TACHO].
+
+J-TACHO_SecurityTarget_Lite
+
+7.
+
+Security Problem Definition (ASE_SPD)
+This
+
+7.1
+
+Assets
+This section introduces the assets to be protected.
+For each asset it is specified the kind of dangers that weigh on it.
+Asset
+
+Definition
+
+Identification data (IDD)
+
+Card identification data, user
+identification data (see Glossary for
+more details)
+Activity data (see Glossary for more
+details).
+
+Activity data (ACD)
+
+Property to be
+protected by the
+TOE
+Integrity
+
+Integrity,
+Authenticity,
+Confidentiality
+
+Table 2: Primary assets to be protected by the TOE and its environment
+
+Asset
+
+Definition
+
+Application (APP)
+
+Tachograph application.
+
+Keys to protect data
+(KPD)
+
+Enduring private keys and session
+keys used to protect security data and
+user data held within and transmitted
+by the TOE, and as a means of
+authentication.
+Public keys certified by Certification
+Authorities, used to verify electronic
+signatures.
+Authentication data provided as input
+for
+authentication
+attempt
+as
+authorised user (i.e. entered PIN on
+workshop cards).
+Data persistently stored by the TOE
+for verification of the authentication
+attempt as authorised user (i.e.
+reference PIN on workshop cards).
+The complete electronic data to be
+signed (including both user message
+and signature attributes).
+
+Confidentiality,
+Integrity
+
+File structure, access conditions,
+identification data concerning the IC
+
+Integrity
+
+Signature
+data (SVD)
+
+verification
+
+Verification
+authentication data
+(VAD)
+Reference
+authentication data
+(RAD)
+Data to be signed
+(DTBS)
+
+TOE file system,
+including specific
+
+Property to be
+protected by the
+TOE
+Integrity
+
+Integrity,
+Authenticity
+Integrity
+
+Confidentiality,
+Integrity
+
+Integrity,
+Authenticity
+
+J-TACHO_SecurityTarget_Lite
+
+identification data
+
+and
+the
+Smartcard Embedded
+Software as well as the date and time
+of the personalisation
+
+Table 3: Secondary assets to be protected by the TOE and its environment
+
+IDD and ACD are primary assets while all the others are secondary assets to be protected
+by the TOE and its environment
+All primary assets represent User Data in the sense of the CC. The secondary assets also
+have to be protected by the TOE in order to achieve a sufficient protection of the primary
+assets. The secondary assets represent TSF and TSF-data in the sense of the CC. Security
+data and user data, stored by the Tachograph Card, need to be protected against
+unauthorised modification and disclosure. User data include card and human user
+identification data and activity data (see Glossary for more details), and match User Data in
+the sense of the CC. Security data are defined as specific data needed to support security
+enforcement, and match the TSF data in the sense of the CC.
+
+7.2
+
+Subjects and external entities
+This Security Target considers the following subjects, who can interact with the TOE.
+Role
+Definition
+Administrator/Personalization Agent
+Usually active only during Personalisation
+(Phase 6) – listed here for the sake of
+completeness.
+Vehicle Unit
+Vehicle Unit (authenticated), to which the
+Tachograph Card is connected (S.VU).
+Other Device
+Other device (not authenticated) to which the
+Tachograph Card is connected (S.Non-VU).
+Attacker
+A human or a process located outside the
+TOE and trying to undermine the security
+policy defined by the current ST, especially to
+change properties of the maintained assets.
+For example, a driver could be an attacker if
+he misuses the driver card. An attacker is
+assumed to possess at most a high attack
+potential.
+Table 4: Subjects and external entities
+
+Application note: This table defines the subjects in the sense of [CC1] which can be
+recognised by the TOE independently of their nature (human or process). As result of an
+appropriate identification and authentication process, the TOE creates – for each of the
+respective external entities except the Attacker, who is listed for completeness – an ‘image’
+inside and ‘works’ then with this TOE internal image (also called subject in [CC1]). From this
+point of view, the TOE itself does not distinguish between “subjects” and “external entities”.
+Application note: The subject Administrator/Personalization Agent is included only in few
+security functional requirements related to role authentication before the TOE
+Personalisation (Phase 6) is allowed this because the ST describes the TOE functionalities
+only for the end-usage/operational usage (Phase 7) - after personalisation.
+
+7.3
+
+Threats
+This section describes the threats to be countered by the TOE independently or in
+collaboration with its IT environment. These threats arise from the assets protected by the
+TOE and the method of TOE’s use in the operational environment.
+
+J-TACHO_SecurityTarget_Lite
+
+The threats are defined in the following table.
+Label
+T.Identification_Data
+
+T.Application
+
+T.Activity_Data
+
+T.Data_Exchange
+
+T.Clone
+
+Threat
+Modification of Identification Data - A successful modification of
+identification data held by the TOE (IDD, e.g. the type of card, or the
+card expiry date or the user identification data) would allow an
+attacker to misrepresent driver activity.
+Modification of Tachograph application - A successful modification or
+replacement of the Tachograph application stored in the TOE (APP),
+would allow an attacker to misrepresent human user (especially
+driver) activity.
+Modification of Activity Data - A successful modification of activity
+data stored in the TOE (ACD) would allow an attacker to
+misrepresent human user (especially driver) activity.
+Modification of Activity Data during Data Transfer - A successful
+modification of activity data (ACD deletion, addition or modification)
+during import or export would allow an attacker to misrepresent
+human user (especially driver) activity.
+Cloning of cards – An attacker could read or copy secret
+cryptographic keys from a Tachograph card and use it to create a
+duplicate card, allowing an attacker to misrepresent human user
+(especially driver) activity.
+
+Table 5: Threats addressed by the TOE
+
+7.4
+
+Organizational Security Policies
+
+This section shows the organisational security policies that are to be enforced by the TOE, its operational
+environment, or a combination of the two.
+The organisational security policies are provided in the following table.
+Label
+
+Organisational Security Policy
+
+P.Crypto
+
+The cryptographic algorithms and keys described in
+[EU_2016_165] Annex 1C, Appendix 11 shall be used where
+data confidentiality, integrity, authenticity and/or nonrepudiation need to be protected.
+Table 6: Organisational security policies
+
+J-TACHO_SecurityTarget_Lite
+
+7.5
+
+Assumptions
+This section describes the assumptions that are made about the operational environment in
+order to be able to provide the security functionality. If the TOE is placed in an operational
+environment that does not uphold these assumptions it may be unable to operate in a secure
+manner.
+The assumptions are provided in the following table.
+Label
+A.Personalisation_Phase
+
+Assumption
+Personalisation Phase Security - All data structures and data on
+the card produced during the Personalisation Phase, in particular
+during initialisation and/or personalisation are correct according
+to [EU_2016_165] Annex 1C, and are handled correctly so as to
+preserve the integrity and confidentiality of these data. This
+includes in particular sufficient cryptographic quality of
+cryptographic keys for the end-usage (in accordance with the
+cryptographic algorithms specified for Tachograph Cards) and
+their confidential handling. The Personalisation Service Provider
+controls all materials, equipment and information, which is used
+for initialisation and/or personalisation of authentic smart cards,
+in order to prevent counterfeit of the TOE.
+Table 7: Assumptions
+
+7.6
+
+Security objectives (ASE_OBJ)
+This
+
+
+
+
+
+7.6.1
+
+Security objectives for the TOE
+The
+[EU_2016_165]
+Label
+
+O.Card_Activity_Storage
+
+O.Protect_Secret
+
+[EC1360_2002]
+
+Security objective for the TOE
+Integrity of Identification Data - The TOE must
+preserve the integrity of card identification data and
+user identification data stored during the card
+personalisation process.
+Integrity of Activity Data - The TOE must preserve the
+integrity of user data stored in the card by Vehicle
+Units.
+Protection of secret keys – The TOE must preserve the
+confidentiality of its secret cryptographic keys, and
+must prevent them from being copied.
+
+J-TACHO_SecurityTarget_Lite
+
+O.Data_Access
+
+O.Secure_Communications
+
+O.Crypto_Implement
+
+O.Software_Update
+
+User Data Write Access Limitation - The TOE must
+limit user data write access to authenticated Vehicle
+Units.
+Secure Communications - The TOE must support
+secure communication protocols and procedures
+between the card and the Vehicle Unit when required.
+Cryptographic operation – The cryptographic functions
+must be implemented as required by [EU_2016_165]
+Annex 1C, Appendix 11.
+Software updates - Where updates to TOE software
+are possible, the TOE must accept only those that are
+authorised.
+
+Table 8: Security objectives for the TOE
+
+7.6.2
+
+Security objectives for the operational environment
+The security objectives for the operational environment address the protection that must be
+provided by the TOE environment, independent of the TOE itself, and are listed in the table
+below.
+Label
+OE.Personalisation_Phase
+
+OE.Crypto_Admin
+
+OE.EOL
+
+Security objective for the environment
+Secure Handling of Data in Personalisation Phase - All data
+structures and data on the card produced during the
+Personalisation Phase, in particular during initialisation
+and/or personalisation must be correct according to
+[EU_2016_165] Annex 1C, and must be handled so as to
+preserve the integrity and confidentiality of the data. The
+Personalisation Service Provider must control all materials,
+equipment and information that are used for initialisation
+and/or personalisation of authentic smart cards, in order to
+prevent counterfeit of the TOE. The execution of the TOE's
+personalisation process must be appropriately secured with
+the goal of data integrity and confidentiality.
+Implementation of Tachograph Components – All
+requirements from [EU_2016_165] concerning handling and
+operation of the cryptographic algorithms and keys must be
+fulfilled.
+End of life - When no longer in service the TOE must be
+disposed of in a secure manner, which means, as a
+minimum, that the confidentiality of symmetric and private
+cryptographic keys has to be safeguarded.
+
+Table 9: Threats addressed by the operational environment
+
+7.6.3
+
+Security objectives rationale
+The following table provides an overview for security objectives coverage (TOE and its
+operational environment), also giving an evidence for sufficiency and necessity of the
+security objectives defined. It shows that all threats and OSPs are addressed by the security
+objectives. It also shows that all assumptions are addressed by the security objectives for
+the TOE environment.
+
+J-TACHO_SecurityTarget_Lite
+
+Table 10: Security Objectives Rationale
+
+7.6.4
+
+SPD and Security Objectives Relation
+T.Identification_Data
+This threat is countered by the security objective that ensures the integrity of Identification Data
+(O.Card_Identification_Data) that preserves integrity of card identification data and user identification
+data stored during the card personalisation process. Objectives O.Crypto_Implement and
+OE.Crypto_Admin contribute to cover this threat by requiring implementation and management of
+strong cryptography.
+T.Application
+Objective O.Software_Update covers this threat by requiring that any update to the tachograph
+application is authorized. O.Crypto_Implement and O.Protect_Secret support the covering of the
+threat by preserving the confidentiality of TOE’s secret cryptographic keys, preventing their copy and
+misuse. OE.EOL ensures that at the end of card’s life it is properly disposed in order to prevent
+misuse.
+T.Activity_Data
+This threat is covered by integrity of Activity Data security objectives according to which the TOE
+must preserve the integrity of user data stored in the card by VU (O.Card_Activity_Storage),
+O.Data_Access security objective supports the coverage by ensuring that only authenticated VU
+access user data stores in the TOE. O.Crypto_Implement and OE.Crypto_Admin contribute to cover
+this threat by requiring implementation and management of strong cryptography.
+T.Data_Exchange
+The threat is covered by O.Secure_Communications that requires usage of Secure Communications
+for the TOE. Beisdes, O.Crypto_Implement and OE.Crypto_Admin give the necessary strong crypto
+support to manage the communication security while O.Protect_Secret support the covering of the
+threat by preserving the confidentiality of TOE’s secret cryptographic keys, preventing their copy and
+misuse.
+T.Clone
+
+J-TACHO_SecurityTarget_Lite
+
+This threat is covered by security objective O.Protect_Secret that prevent an attacker from extracting
+cryptographic material from the TOE. It is also covered by OE.EOL security objective that ensures
+proper disposal of the card at the end of card’s life.
+P.Crypto requires usage of specific cryptographic algorithms and keys when data confidentiality,
+integrity, authenticity and/or non-repudiation need to be protected, this is addressed by
+corresponding security objective O.Crypto_Implement.
+A.Personalization_Phase requires that all data structures and data (including cryptographic keys)
+on the card produced during the Personalisation Phase, in particular during initialisation and/or
+personalisation are handled correctly so as to preserve the integrity and confidentiality of these data.
+This is ensured by the corresponding objectives for the environment OE.Personalization_Phase and
+OE.Crypto_Admin.
+
+7.7
+
+Statement of Compatibility concerning Composite Security Target
+(ASE_COMP)
+
+Platform SFRs
+FRU_FLT.2
+FPT_FLS.1
+FMT_LIM.1/Test
+FMT_LIM.2/Test
+FMT_LIM.1/Loader
+FMT_LIM.2/Loader
+FAU_SAS.1
+FDP_SDC.1
+FDP_SDI.2
+FPT_PHP.3
+FDP_ITT.1
+FPT_ITT.1
+FDP_IFC.1
+
+Composite ST SFRs
+IP_SFR: Not relevant / Not used
+RP_SRF: FPT_FLS.1
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+RP_SRF: FPT_PHP.3
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+
+FCS_RNG.1
+
+RP_SRF: FCS_RNG.1
+
+FCS_COP.1/DRBG
+
+FCS_COP.1
+
+FCS_CKM.1
+FDP_ACC.2/Memories
+FDP_ACF.1/Memories
+
+RP_SRF: Contributes to implementation of:
+FCS_RNG.1
+RP_SRF: Contributes to implementation of FCS_COP.1:
+nd
+FCS_COP.1/AES_2
+nd
+FCS_COP.1/SHA-2_2
+nd
+FCS_COP.1/ECC_2
+st
+FCS_COP.1/1 _TDES
+st
+FCS_COP.1/1 _RSA
+st
+FCS_COP.1/1 _SHA-1
+RP_SRF: Contributes to implementation of FCS_CKM.1:
+nd
+FCS_CKM.1/2
+st
+FCS_CKM.1/1
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+
+J-TACHO_SecurityTarget_Lite
+
+FMT_MSA.3/Memories
+FMT_MSA.1/Memories
+FMT_SMF.1/Memories
+FDP_ITC.1/Loader
+FDP_ACC.1/Loader
+FDP_ACF.1/Loader
+FMT_MSA.3/Loader
+FMT_MSA.1/Loader
+FMT_SMR.1/Loader
+FIA_UID.1/Loader
+FMT_SMF.1/Loader
+All MFPlus SFRs
+All DESFire SFRs
+
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+IP_SFR: Not relevant / Not used
+
+Table 11 - Platform SFRs VS Composite TOE SFRs
+
+J-TACHO_SecurityTarget_Lite
+
+Platform Objectives
+
+Composite ST Objectives
+
+BSI.O.Identification
+
+Not relevant
+
+BSI.O.Leak-Inherent
+BSI.O.Leak-Forced
+BSI.O.Phys-Probing
+BSI.O.PhysManipulation
+
+O.Card_Identification_Data
+O.Card_Activity_Data
+O.Data_Protect_Secret
+
+Remarks
+Not direct link to the composite
+product. Nevertheless, chip
+traceability data is used by the TOE
+to fulfill identification CC assurance
+requirements
+
+O.Card_Activity_Data
+O.Data_Protect_Secret
+O.Card_Identification_Data
+O.Card_Activity_Data
+O.Data_Protect_Secret
+
+BSI.O.Malfunction
+BSI.O.Abuse-Func
+
+BSI.O.RND
+
+Not relevant
+
+BSI.O.Cap-Avail-Loader
+
+Not relevant
+
+AUG1.O.Add-Functions
+
+Not relevant
+
+AUG4.O.Mem Access
+
+Not relevant
+
+O.Controlled-ESLoading
+MFPlus and DESFire are
+not embedded,
+objectives related to
+them are not valid and
+not listed here
+
+Not direct link to the composite
+product.
+This is ensured by J-SAFE3 Platform.
+
+Not relevant
+
+Not relevant
+
+Additional Objectives
+
+O.Data_Access
+O.Secure_Communications
+
+O.Crypto_Implement
+
+O.Software_Update
+Table 12 - Platform Objectives VS Composite TOE Objectives
+
+J-TACHO_SecurityTarget_Lite
+
+Platform OE
+BSI.OE.Lim-Block-Loader
+
+BSI.OE.Resp-Appl
+
+BSI.OE.Process-Sec-IC
+
+Composite ST Objectives for the Environment
+Fulfilled by Transport Key Verification as described in ALC_DEL.1
+Covered by TOE Security Objectives
+O.Card_Identification_Data
+O.Card_Activity_Data
+O.Data_Protect_Secret
+O.Secure_Communications
+Fulfilled by ALC_DVS.2 and ALC_DEL.1 during phases 4 and 5.
+After phase 5, covered by O.Protect_Secret, O.Secure_communications, OE.EOL and
+OE.Personalisation_Phase
+Additional Objectives for the Environment
+OE.Crypto_Admin
+Table 13 - Platform OEs VS Composite TOE OEs
+
+J-TACHO_SecurityTarget_Lite
+
+Platform SARs
+(EAL5 augmented by
+ADV_IMP.2, ADV_TDS.5, ALC_CMC.5,
+ALC_DVS.2, ALC_FLR.1, ALC_TAT.3,
+ASE_TSS.2, AVA_VAN.5)
+ADV_ARC.1
+
+Composite SARs
+(EAL4 augmented by
+ATE_DPT.2 and AVA_VAN.5)
+
+ADV_FSP.5
+
+ADV_ARC.1
+ADV_FSP.4
+
+ADV_IMP.2
+
+ADV_IMP.1
+-
+
+ADV.INT.2
+ADV_TDS.5
+
+ADV_TDS.3
+
+AGD_OPE.1
+
+AGD_OPE.1
+
+AGD_PRE.1
+
+AGD_PRE.1
+
+ALC_CMC.5
+
+ALC_CMC.4
+
+ALC_CMS.5
+
+ALC_CMS.4
+
+ALC_DEL.1
+
+ALC_DEL.1
+
+ALC_DVS.2
+
+ALC_DVS.1
+
+ALC_FLR.1
+
+-
+
+ALC_LCD.1
+
+ALC_LCD.1
+
+ALC_TAT.3
+
+ALC_TAT.1
+
+ASE_CCL.1
+
+ASE_CCL.1
+
+ASE_ECD.1
+
+ASE_ECD.1
+
+ASE_INT.1
+
+ASE_INT.1
+
+ASE_OBJ.2
+
+ASE_OBJ.2
+
+ASE_REQ.2
+
+ASE_REQ.2
+
+ASE_SPD.1
+
+ASE_SPD.1
+
+ASE_TSS.2
+
+ASE_TSS.1
+
+ATE_COV.2
+
+ATE_COV.2
+
+ATE_DPT.3
+
+ATE_DPT.2
+
+ATE_FUN.1
+
+ATE_FUN.1
+
+ATE_IND.2
+
+ATE_IND.2
+
+AVA_VAN.5
+
+AVA_VAN.5
+Table 14 - Platform SARs VS Composite TOE SARs
+
+J-TACHO_SecurityTarget_Lite
+
+8.
+
+Extended Components Definition (ASE_ECD)
+For this ST the security functional requirements in [CC2] have been extended to cover part of the
+TOE functionality that cannot otherwise clearly be expressed with the following SFRs: FCS_RNG
+(Random number generation) and FPT_EMS (TOE Emanation)
+
+8.1
+
+Definition of Family FCS_RNG
+Section extracted from Eurosmart – Security IC Platform Protection Profile with
+Augmentation Packages [[BSI_ PP_0084]].
+To
+
+Family behavior:
+This family defines quality requirements for the generation of random numbers
+which are intended to be use for cryptographic purposes.
+Component leveling:
+
+FCS_RNG.1
+
+Generation of random numbers requires that random numbers meet a
+defined quality metric.
+
+Management: FCS_RNG.1
+There are no management activities foreseen.
+Audit: FCS_RNG.1
+There are no actions defined to be auditable.
+FCS_RNG.1
+
+Random number generation.
+
+Hierarchical to: No other components.
+Dependencies: No dependencies.
+FCS_RNG.1.1 The TSF shall provide a [selection: physical, non-physical true,
+deterministic, hybrid physical, hybrid deterministic] random number
+generator that implements: [assignment: list of security capabilities].
+FCS_RNG.1.2 The TSF shall provide [selection: bits, octets of bits, numbers [assignment:
+format of the numbers]] that meet [assignment: a defined quality metric].
+Application note:
+
+J-TACHO_SecurityTarget_Lite
+
+8.2
+
+Definition of Family FPT_EMS
+To
+
+Family behavior:
+This family defines requirements to prevent attacks against TSF data and user data
+where the attack is based on external observable physical phenomena of the TOE.
+Examples of such attacks are evaluation of TOE’s electromagnetic radiation, simple
+power analysis (SPA), differential power analysis (DPA), timing attacks, etc.
+Component leveling:
+
+FPT_EMS.1
+
+Generation of random numbers requires that the TOE does not produce
+intelligible emissions that enable access to TSF data or user data.
+
+Management: FPT_EMS.1
+There are no management activities foreseen.
+Audit: FPT_EMS.1
+There are no actions defined to be auditable.
+FPT_EMS.1
+
+Random number generation.
+
+Hierarchical to: No other components.
+Dependencies: No dependencies.
+FPT_EMS.1.1
+
+The TOE shall not emit [assignment: types of emissions] in excess of
+[assignment: specified limits] enabling access to [assignment: list of types of
+TSF data] and [assignment: list of types of user data].
+
+FPT_EMS.1.2
+
+The TSF shall ensure [assignment: type of users] are unable to use the
+following interface [assignment: type of connection] to gain access to
+[assignment: list of types of TSF data] and [assignment: list of types of user
+data].
+
+J-TACHO_SecurityTarget_Lite
+
+9.
+
+Security requirements (ASE_REQ)
+This section defines the detailed security requirements that shall be satisfied by the TOE. The
+statement of TOE security requirements defines the functional and assurance security
+requirements that the TOE needs to satisfy in order to meet the security objectives for the TOE.
+The CC allows several operations to be performed on security requirements (on the component
+level); refinement, selection, assignment, and iteration are defined in paragraph 8.1 of Part 1 [CC1].
+Each of these operations is used in this ST.
+The refinement operation is used to add detail to a requirement, and, thus, further restricts a
+requirement. Refinements of security requirements are denoted in such a way that added words are
+in bold text and changed words are crossed out.
+The selection operation is used to select one or more options provided by the CC in stating a
+requirement. Selections that have been made by the PP author are denoted by underlined text.
+Selections to be filled in by the ST author appear in square brackets with an indication that a
+selection is to be made, [selection:], and are italicised.
+The assignment operation is used to assign a specific value to an unspecified parameter, such as
+the length of a password. Assignments that have been made by the PP author are denoted by
+underlined text. Assignments to be filled in by the ST author appear in square brackets with an
+indication that an assignment is to be made [assignment:], and are italicised. In some cases the
+assignment made by the PP authors defines a selection to be performed by the ST author. Thus,
+this text is underlined and italicised.
+Some additions have been made to the ST with respect to the PP SFRs, to incorporate in the ST the
+authentication of the personalization agent. The added words are written bold, underlined and
+italicised.
+The iteration operation is used when a component is repeated with varying operations. Iteration is
+denoted by showing a number and identifier in brackets after the component name, and the iteration
+number after each element designator.
+Security functional requirements for the TOE
+This section is subdivided to show security functional requirements that relate to the TOE itself, and
+those that relate to external communications.
+Section 9.1 addresses requirements for the tachograph card.
+Section 9.2 addresses the communication requirements for 2nd generation vehicle units to be used
+with the TOE.
+Section 9.3 addresses the communication requirements for 1st generation vehicle units to be used
+with the TOE.
+SFRs in [PP_TACHO]
+FAU_ARP.1
+FAU_SAA.1
+FCO_NRO.1
+FDP_ACC.2
+FDP_ACF.1
+FDP_DAU.1
+FDP_ETC.1
+FDP_ETC.2
+FDP_ITC.1
+FDP_ITC.2
+FDP_RIP.1
+FDP_SDI.2
+
+SFRs in this ST
+FAU_ARP.1
+FAU_SAA.1
+FCO_NRO.1
+FDP_ACC.2
+FDP_ACF.1
+FDP_DAU.1
+FDP_ETC.1
+FDP_ETC.2
+FDP_ITC.1
+FDP_ITC.2
+FDP_RIP.1
+FDP_SDI.2
+
+J-TACHO_SecurityTarget_Lite
+
+FIA_AFL.1(1:C)
+FIA_AFL.1(2:WC)
+FIA_ATD.1
+FIA_UAU.3
+FIA_UAU.4
+FIA_UID.2
+FIA_USB.1
+FPR_UNO.1
+FPT_EMS.1
+FPT_FLS.1
+FPT_PHP.3
+FPT_TST.1
+Tachograph card 2nd generation
+specific
+FCS_CKM.1(1)
+FCS_CKM.2(1)
+FCS_CKM.4(1)
+FCS_COP.1(1:AES)
+FCS_COP.1(2:SHA-2)
+FCS_COP.1(3:ECC)
+FCS_RNG.1
+FIA_UAU.1(1)
+FPT_TDC.1(1)
+FTP_ITC.1(1)
+Tachograph card 1st generation
+specific
+FCS_CKM.1(2)
+FCS_CKM.2(2)
+FCS_CKM.4(2)
+FCS_COP.1(4:TDES)
+FCS_COP.1(5:RSA)
+FCS_COP.1(6:SHA-1)
+FIA_UAU.1(2)
+FPT_TDC.1(2)
+FTP_ITC.1(2)
+
+9.1
+
+FIA_AFL.1/C
+FIA_AFL.1/WC
+FIA_ATD.1
+FIA_UAU.3
+FIA_UAU.4
+FIA_UID.2
+FIA_USB.1
+FPR_UNO.1
+FPT_EMS.1
+FPT_FLS.1
+FPT_PHP.3
+FPT_TST.1
+
+FCS_RNG.1
+
+Security functional requirements for the Tachograph Card
+
+Class FAU Security Audit
+
+FAU_ARP.1
+
+Security alarms
+
+Hierarchical to:Dependencies: FAU_SAA.1 Potential violation analysis
+FAU_ARP.1.1 The TSF shall take the following actions:
+a. For user authentication failures activity data input integrity errors – respond to the
+VU through SW1 SW2 status words, as defined in [EU_2016_165] Annex 1C,
+Appendix 2;
+b. For self-test errors and stored data integrity errors - respond to any VU command
+with an SW1 SW2 status word indicating the error:
+
+J-TACHO_SecurityTarget_Lite
+
+For self-test error: SW1SW2=0x6400
+For stored data integrity error: SW1SW2=0x6581 or 0x6281
+upon detection of a potential security violation.
+
+FAU_SAA.1 Potential violation analysis
+Hierarchical to:Dependencies: FAU_GEN.1 Audit data generation
+FAU_SAA.1.1 The TSF shall be able to detect failure events as user authentication failures,
+self-test errors, stored data integrity errors and activity data input integrity errors, to apply a
+set of rules in monitoring the audited events and based upon these rules indicate a potential violation
+of the enforcement of the SFRs.
+FAU_SAA.1.2 The TSF shall enforce the following rules for monitoring audited events:
+a. Accumulation or combination of [
+ user authentication failure,
+ self test error,
+ stored data integrity error,
+ activity data input integrity error ]
+known to indicate a potential security violation;
+1
+
+b. [none] .
+Application note: The events user authentication failure, self test error, stored data integrity error
+and activity data input integrity error may occur in combination or as single failure event. The vehicle
+unit is informed of such events through the SW1 SW2 status words in responses to vehicle unit
+requests. The vehicle unit then stores events indicated by the TOE.
+
+Class FCO Communication
+
+FCO_NRO.1 Selective proof of origin
+Hierarchical to:Dependencies:FIA_UID.1 Timing of identification
+FCO_NRO.1.1 The TSF shall be able to generate evidence of origin for transmitted [data to be
+downloaded to external media] at the request of the [recipient] in accordance with [EU_2016_165]
+Annex 1C, Appendix 11, sections 6.1 and 14.2.
+FCO_NRO.1.2 The TSF shall be able to relate the [user identity by means of digital signature] of the
+originator of the information, and the [hash value over the data to be downloaded to external media]
+of the information to which the evidence applies.
+FCO_NRO.1.3 The TSF shall provide a capability to verify the evidence of origin of information to
+[recipient] given [that the digital certificate used in the digital signature for the downloaded data has
+not expired (see [EU_2016_165] Appendix 11, sections 6.2 and 14.3].
+
+any other rules]
+
+J-TACHO_SecurityTarget_Lite
+
+Application note: Note that FCO_NRO.1 applies only to driver cards and workshop cards, as those
+are the only cards capable of creating a signature over downloaded data. See [EU_2016_165]
+Appendix 11, sections 6 and 14.
+
+Class FDP User data protection
+
+FDP_ACC.2 Complete access control
+Hierarchical to:Dependencies:FDP_ACF.1 Access control functions
+FDP_ACC.2.1 The TSF shall enforce the [AC SFP] on [
+Subjects:
+
+S.VU (a vehicle unit in the sense of [EU_2016_165] Annex 1C )
+
+S.Non-VU (other card interface devices)
+
+Personalization Agent
+Objects:
+
+User data
+User Identification data
+Activity data
+
+Security data
+Cryptographic keys (KPD in
+)
+PIN (for Workshop card)
+
+TOE application code
+
+TOE file system
+
+Card identification data
+
+Master file contents
+and all operations among subjects and objects covered by the SFP.
+FDP_ACC.2.2 The TSF shall ensure that all operations between any subject controlled by the TSF
+and any object controlled by the TSF are covered by an access control SFP.
+
+FDP_ACF.1 Security attribute based access control
+Hierarchical to:Dependencies: FDP_ACC.1 Subset access control,
+FMT_MSA.3 Static attribute initialization
+FDP_ACF.1.1 The TSF shall enforce the [AC SFP] to objects based on the following:
+Subjects:
+
+S.VU (in the sense of [EU_2016_165] Annex 1C )
+
+S.Non-VU (other card interface devices)
+
+Personalization Agent
+
+Objects:
+
+User data
+User identification data
+Activity data
+
+Security data
+
+J-TACHO_SecurityTarget_Lite
+
+Cryptographic keys (KPD in
+)
+PIN (for Workshop card)
+TOE application code
+TOE file system (Attribute: access conditions)
+Card identification data
+Master file contents].
+
+
+
+
+
+
+FDP_ACF.1.2 The TSF shall enforce the following rules to determine if an operation among
+controlled subjects and controlled objects is allowed: [
+
+
+GENERAL_READ
+-
+
+
+
+
+
+-
+
+Driver card, workshop card: user data may be read from the TOE by any user
+Control card, company card: user data may be read from the TOE by any user, except user
+identification data stored in the 1st generation tachograph application, which may be read by
+S.VU only
+IDENTIF_WRITE
+All card types: card identification data and user identification data may only be written once
+and before the end of Personalisation
+No user may write or modify identification data during the end-usage phase of the card lifecycle
+ACTIVITY_WRITE
+All card types: activity data may be written to the card by S.VU only
+SOFT_UPGRADE
+All card types: TOE application code may only be upgraded following successful
+authentication
+FILE_STRUCTURE
+All card types: files structure and access conditions shall be created before Personalisation
+is completed and then locked from any future modification or deletion by any user without
+successful authentication by the party responsible for card initialisation].
+
+Application note: The Personalization Agent Authentication Key(s) are pre-loaded in the TOE
+at the end of Phase 5 - TOE composite product integration.
+Application note: The operation “FILE_STRUCTURE” is allowed when the TOE is in the Phase
+6 – TOE Personalization only after successful “Personalization Agent” authentication.
+Application note: When the TOE is in the Phase 6 – TOE Personalization or in Phase 7 – TOE
+Operational usage the operation “SOFT_UPGRADE2” isn’t allowed.
+FDP_ACF.1.3 The TSF shall explicitly authorize access of subjects to objects based on the following
+additional rules: [none].
+FDP_ACF.1.4 The TSF shall explicitly deny access of subjects to objects based on the following
+additional rules: [
+
+SECRET KEYS
+- The TSF shall prevent access to secret cryptographic keys other than for use in the TSF’s
+cryptographic operations, or in case of a workshop card only, for exporting the
+SensorInstallationSecData to a VU, as specified in [EU_2016_165] Annex 1C, Appendix 2].
+
+FDP_DAU.1 Basic data authentication
+Hierarchical to:-
+
+J-TACHO_SecurityTarget_Lite
+
+Dependencies:FDP_DAU.1.1 The TSF shall provide a capability to generate evidence that can be used as a
+guarantee of the validity of [activity data].
+FDP_DAU.1.2 The TSF shall provide [S.VU and S.Non-VU] with the ability to verify evidence of the
+validity of the indicated information.
+
+FDP_ETC.1 Export of user data without security attributes
+Hierarchical to:Dependencies:FDP_ACC.1 Subset access control, or FDP_IFC.1 Subset information flow control
+FDP_ETC.1.1 The TSF shall enforce the [AC SFP] when exporting user data controlled under the
+SFP(s), outside the TOE.
+FDP_ETC.1.2 The TSF shall export the user data without the user data’s associated security
+attributes.
+
+FDP_ETC.2 Export of user data with security attributes
+Hierarchical to:Dependencies:FDP_ACC.1 Subset access control,
+or FDP_IFC.1 Subset information flow control
+FDP_ETC.2.1 The TSF shall enforce the [AC SFP] when exporting user data controlled under the
+SFP(s), outside the TOE.
+FDP_ETC.2.2 The TSF shall export the user data with the user data’s associated security attributes.
+FDP_ETC.2.3 The TSF shall ensure that the security attributes, when exported outside the TOE, are
+unambiguously associated with the exported user data.
+FDP_ETC.2.4 The TSF shall enforce the following rules when user data is exported from the TOE:
+[none].
+
+FDP_ITC.1 Import of user data without security attributes
+Hierarchical to:Dependencies:[FDP_ACC.1 Subset access control,
+or FDP_IFC.1 Subset information flow control]
+FMT_MSA.3 Static attribute initialization
+FDP_ITC.1.1The TSF shall enforce the [AC SFP] when importing user data, controlled under the
+SFP, from outside of the TOE.
+FDP_ITC.1.2 The TSF shall ignore any security attributes associated with the user data when
+imported from outside the TOE.
+FDP_ITC.1.3 The TSF shall enforce the following rules when importing user data controlled under
+the SFP from outside the TOE: [none].
+
+J-TACHO_SecurityTarget_Lite
+
+FDP_ITC.2 Import of user data with security attributes
+Hierarchical to:Dependencies:[FDP_ACC.1 Subset access control,
+or FDP_IFC.1 Subset information flow control]
+[FPT_ITC.1 Inter-TSF trusted channel,
+or FTP_TRP.1 Trusted path]
+FPT_TDC.1 Inter-TSF basic TSF data consistency
+FDP_ITC.2.1 The TSF shall enforce the [Input Sources SFP] when importing user data, controlled
+under the SFP, from outside of the TOE.
+FDP_ITC.2.2 The TSF shall use the security attributes associated with the imported user data.
+FDP_ITC.2.3 The TSF shall ensure that the protocol used provides for the unambiguous association
+between the security attributes and the user data received.
+FDP_ITC.2.4 The TSF shall ensure that interpretation of the security attributes of the imported user
+data is as intended by the source of the user data.
+FDP_ITC.2.5 The TSF shall enforce the following rules when importing user data controlled under
+the SFP from outside of the TOE: [
+- unauthenticated inputs from external sources shall not be accepted as executable code;
+- if application software updates are permitted they shall be verified using cryptographic
+security attributes before being implemented].
+Application note: requirement for verified software updates not applicable since application
+software cannot be updated outside of the manufacturing environment.
+
+FDP_RIP.1 Subset residual information protection
+Hierarchical to:Dependencies:FDP_RIP.1.1 The TSF shall ensure that any previous information content of a resource is made
+2
+unavailable upon the [deallocation of the resource from] the following objects: [cryptographic keys,
+3
+(KDP in
+)] .
+
+FDP_SDI.2 Stored data integrity monitoring and action
+Hierarchical to:Dependencies:FDP_SDI.2.1 The TSF shall monitor user data stored in containers controlled by the TSF for
+4
+[integrity errors] on all objects, based on the following attributes [integrity checked stored user data
+5
+attributes] .
+FDP_SDI.2.2 Upon detection of a data integrity error, the TSF shall [warn the entity connected].
+
+: allocation of the resource to, deallocation of the resource from]
+: list of objects]
+: integrity errors]
+: user data attributes]
+
+J-TACHO_SecurityTarget_Lite
+
+Class FIA Identification and authentication
+
+FIA_AFL.1/Authentication failure handling (C)
+Hierarchical to: Dependencies: FIA_UAU.1 Timing of authentication
+FIA_AFL.1.1/(C) The TSF shall detect when [1] unsuccessful authentication attempts occur related
+to [authentication of a card interface device].
+FIA_AFL.1.2/(C) When the defined number of unsuccessful authentication attempts has been [met
+or surpassed], the TSF shall [
+
+warn the entity connected,
+
+assume the user to be S.Non-VU].
+
+FIA_AFL.1/ Authentication failure handling (WC)
+Hierarchical to:Dependencies:FIA_UAU.1 Timing of authentication
+FIA_AFL.1.1/(WC) The TSF shall detect when [5] unsuccessful authentication attempts occur
+related to [PIN verification of Workshop Card].
+FIA_AFL.1.2/(WC)When the defined number of unsuccessful authentication attempts has been [met
+or surpassed], the TSF shall [:
+
+warn the entity connected,
+
+block the PIN check procedure such that any subsequent PIN check attempt will fail,
+
+be able to indicate to subsequent users the reason for the blocking.]
+
+FIA_ATD.1 User attribute definition
+Hierarchical to:Dependencies:FIA_ATD.1.1 The TSF shall maintain the following list of security attributes belonging to individual
+users:[
+
+User_group (Vehicle_Unit, Non_Vehicle_Unit);
+
+User_ID (VRN and registering member state for subject S.VU).]
+
+FIA_UAU.3 Unforgeable authentication
+Hierarchical to:Dependencies:FIA_UAU.3.1The TSF shall [prevent] use of authentication data that has been forged by any user of
+the TSF.
+FIA_UAU.3.2The TSF shall [prevent] use of authentication data that has been copied from any other
+user of the TSF.
+
+FIA_UAU.4 Single-use authentication mechanisms
+Hierarchical to:Dependencies:-
+
+J-TACHO_SecurityTarget_Lite
+
+FIA_UAU.4.1 The TSF shall prevent reuse of authentication data related to [key based
+authentication mechanisms as defined in [EU_2016_165] Appendix 11, Chapters 4 and 10].
+
+FIA_UID.2 User authentication before any action
+Hierarchical to:FIA_UID.1 Timing of identification
+Dependencies:FIA_UID.2.1 The TSF shall require each user to be successfully identified before allowing any other
+TSF-mediated actions on behalf of that user.
+Application note: The identification of the user is initiated following insertion of the card into a card
+reader and power-up of the card.
+Application note: Only after a successful authentication the “Personalization Agent” can take
+control of the TOE and execute the steps and operations as described in the life cycle Phase
+6 “TOE Personalization”.
+
+FIA_USB.1 User-subject binding
+Hierarchical to:Dependencies:FIA_ATD.1 User attribute definition
+FIA_USB.1.1 The TSF shall associate the following user security attributes with subjects acting on
+behalf of that user: [
+
+User_group (Vehicle_Unit for S.VU, Non_Vehicle_Unit for S.Non-VU);
+
+User_ID (VRN and registering member state for subject S.VU)].
+FIA_USB.1.2 The TSF shall enforce the following rules on the initial association of the user security
+attributes with subjects acting on the behalf of users: [the TOE in the personalization phase creates
+6
+all data structure and security attributes as defined in [EU_2016_165] Appendix 2, Chapters 4] .
+FIA_USB.1.3 The TSF shall enforce the following rules governing changes to the user security
+attributes associated with subjects acting on the behalf of users: [TOE in operational usage doesn’t
+7
+allow changing of attributes] .
+
+Class FPR Privacy
+
+FPR_UNO.1 Unobservability
+Hierarchical to:Dependencies:FPR_UNO.1 The TSF shall ensure that [attackers] are unable to observe the operation [any
+operation involving authentication and/or cryptographic operations] on [security and activity data] by
+[any user].
+
+: rules for the initial association of attributes]
+: rules for the changing of attributes]
+
+J-TACHO_SecurityTarget_Lite
+
+Class FPT Protection of the TSF
+
+FPT_EMS.1 TOE emanation
+Hierarchical to:Dependencies:FPT_EMS.1.1 The TOE shall not emit power variations, timing variations
+9
+10
+art limits enabling access to [private keys or session keys] and none .
+
+8
+
+in excess of state-of-the-
+
+FPT_EMS.1.2 The TSF shall ensure [any users] are unable to use the following interface [smart card
+11
+circuit contacts] to gain access to [private keys or session keys] and none .
+Application note: The TOE shall prevent attacks against the listed secret data where the attack is
+based on external observable physical phenomena of the TOE. Such attacks may be observable at
+the interfaces of the TOE or may be originated from internal operation of the TOE or may be caused
+by an attacker that varies the physical environment under which the TOE operates. The set of
+measurable physical phenomena is influenced by the technology employed to implement the smart
+card. The TOE chip has to provide a smart card contacts interface according to ISO/IEC 7816-2 (not
+only used by the terminal but maybe by an attacker). Examples of measurable phenomena include,
+but are not limited to variations in the power consumption, the timing of signals and the
+electromagnetic radiation due to internal operations or data transmissions.
+
+FPT_FLS.1 Failure with preservation of secure state
+Hierarchical to:Dependencies:FPT_FLS.1.1 The TSF shall preserve a secure state when the following types of failures occur [
+a. Reset;
+b. Power supply cut-off;
+c. Deviation from the specified values of the power supply;
+d. Unexpected abortion of TSF execution due to external or internal events
+(especially interruption of a transaction before completion)].
+
+FPT_PHP.3 Resistance to physical attack
+Hierarchical to:Dependencies:FPT_PHP.3.1 The TSF shall resist [physical manipulation and physical probing] to the [TOE
+components implementing the TSF] by responding automatically such that the SFRs are always
+enforced.
+Application note: The TOE will implement appropriate measures to continuously counter physical
+manipulation and physical probing. Due to the nature of these attacks (especially manipulation) the
+TOE can by no means detect attacks on all of its elements. Therefore, permanent protection against
+these attacks is required ensuring that the TSF security could not be violated at any time. Hence,
+
+: types of emissions]
+: specified limits]
+: list of types of user data]
+: list of types of user data]
+
+J-TACHO_SecurityTarget_Lite
+
+automatic response means here (i) assuming that there might be an attack at any time and (ii)
+countermeasures are provided at any time.
+
+FPT_TST.1 TSF testing
+Hierarchical to:Dependencies:FPT_TST.1.1 The TSF shall run a suite of self tests [during initial start-up and periodically during
+normal operation] to demonstrate the correct operation of [the TSF].
+FPT_TST.1.2 The TSF shall provide authorized users with the capability to verify the integrity of
+[TSF data].
+FPT_TST.1.3 The TSF shall provide authorized users with the capability to verify the integrity of [the
+TSF].
+
+9.2
+
+Security functional requirements for external communications (2nd
+Generation)
+
+The security functional requirements in this section are required to support communications
+specifically with 2nd generation vehicle units.
+
+Class FCS Cryptographic support
+
+FCS_CKM.1/2nd Cryptographic key generation
+Hierarchical to:Dependencies:[FCS_CKM.2 Cryptographic key distribution
+or FCS_COP.1 Cryptographic operation]
+FCS_CKM.4 Cryptographic key destruction
+FCS_CKM.1.1/2nd The TSF shall generate keys in accordance with a specified key generation
+algorithm [cryptographic key derivation algorithms specified in [EU_2016_165] Annex 1C, Appendix
+11, Section 10 (for VU authentication and for the secure messaging session key)] and specified
+cryptographic key sizes [key sizes required by [EU_2016_165] Annex 1C, Appendix 11, Part B] that
+12
+meet the following: [Reference [RNG_FUNC_CLA] predefined RNG class [DRG.3] , [EU_2016_165]
+Annex 1C, Appendix 11, Section 10].
+
+FCS_CKM.2/2nd Cryptographic key distribution
+Hierarchical to:Dependencies:[FDP_ITC.1 Import of user data without security attributes
+or FDP_ITC.2 Import of user data with security attributes
+or FCS_CKM.1 Cryptographic key generation]
+FCS_CKM.4 Cryptographic key destruction
+FCS_CKM.2.1/2nd The TSF shall distribute cryptographic keys in accordance with a specified key
+distribution method [secure messaging AES session key agreement as specified in [EU_2016_165]
+
+PTG.2, PTG.3, DRG.2, DRG.3, DRG.4, NTG.1]
+
+J-TACHO_SecurityTarget_Lite
+
+Annex 1C, Appendix 11, Part B] that meets the following [EU_2016_165] Annex 1C, Appendix 11,
+Part B].
+Application note: FCS_CKM.1/2nd and FCS_CKM.2/2nd relate to session key agreement with the
+vehicle unit (VU).
+
+FCS_CKM.4/2nd Cryptographic key destruction
+Hierarchical to:Dependencies:[FDP_ITC.1 Import of user data without security attributes
+or FDP_ITC.2 Import of user data with security attributes
+or FCS_CKM.1 Cryptographic key generation]
+FCS_CKM.4.1/2nd The TSF shall destroy cryptographic keys in accordance with a specified
+13
+cryptographic key destruction method [physical deletion by overwriting the memory data]
+that
+meets the following [
+ Requirements in [PP_TACHO], Table 20;
+ Temporary private and secret cryptographic keys shall be destroyed in a manner that
+removes all traces of the keying material so that it cannot be recovered by either physical or
+electronic means
+14
+[
+]] .
+
+FCS_COP.1/AES_2nd Cryptographic operation
+Hierarchical to:Dependencies:[FDP_ITC.1 Import of data without security attributes,
+or FDP_ITC.2 Import of user data with security attributes,
+or FCS_CKM.1 Cryptographic key generation]
+FCS_CKM.4 Cryptographic key destruction
+FCS_COP.1.1/AES_2nd The TSF shall perform [the following:
+a. ensuring authenticity and integrity of data exchanged between a vehicle unit and a
+tachograph card;
+b. where applicable, ensuring confidentiality of data exchanged between a vehicle unit and
+a tachograph card;
+c. decrypting confidential data sent by a vehicle unit to a remote early detection
+communication reader over a DSRC connection, and verifying the authenticity of that
+data;]
+in accordance with a specified cryptographic algorithm [AES] and cryptographic key sizes [128, 192,
+256 bits] that meet the following: [FIPS PUB 197: Advanced Encryption Standard, [EU_2016_165]
+Annex 1C, Appendix 11].
+
+FCS_COP.1/SHA-2_2nd Cryptographic operation
+Hierarchical to:Dependencies:[FDP_ITC.1 Import of data without security attributes,
+or FDP_ITC.2 Import of user data with security attributes,
+or FCS_CKM.1 Cryptographic key generation]
+FCS_CKM.4 Cryptographic key destruction
+
+cryptographic key destruction method]
+list of standard]
+
+J-TACHO_SecurityTarget_Lite
+
+FCS_COP.1.1/SHA-2_2nd The TSF shall perform [cryptographic hashing] in accordance with a
+specified cryptographic algorithm [SHA-256, SHA-384, SHA-512] and cryptographic key sizes [not
+applicable] that meet the following: [Federal Information Processing Standards Publication FIPS
+PUB 180-4: Secure Hash Standard (SHS), [EU_2016_165] Annex 1C, Appendix 11].
+
+FCS_COP.1/ECC_2nd Cryptographic operation
+Hierarchical to:Dependencies:[FDP_ITC.1 Import of data without security attributes,
+or FDP_ITC.2 Import of user data with security attributes,
+or FCS_CKM.1 Cryptographic key generation]
+FCS_CKM.4 Cryptographic key destruction
+FCS_COP.1.1/ECC_2nd The TSF shall perform [the following cryptographic operations:
+a. digital signature generation;
+b. digital signature verification;
+c. cryptographic key agreement;
+d. mutual authentication between a vehicle unit and a tachograph card;
+e. ensuring authenticity, integrity and non-repudiation of data downloaded from a
+tachograph card]
+in accordance with a specified cryptographic algorithm [EU_2016_165] Annex 1C, Appendix 11, Part
+B, ECDSA, ECKA-EG] and cryptographic key sizes [in accordance with [EU_2016_165], Appendix
+11, Part B] that meet the following: [[EU_2016_165] Annex 1C, Appendix 11, Part B; FIPS PUB 1864: Digital Signature Standard; BSI Technical Guideline TR-03111 – Elliptic Curve Cryptography –
+version 2, and the standardized domain parameters in
+].
+
+Name
+
+Size (bits)
+
+Object Identifier
+
+Table 15: Standardised domain parameters
+
+Cipher suite Id
+
+ECC key
+size (bits)
+
+AES key
+Hashing
+length (bits) algorithm
+
+MAC length
+(bytes)
+
+Table 16: Cipher suites
+Application note:
+shows the allowed cipher suites. ECC keys sizes of 512 bits and 521
+bits are considered to be equal in strength for all purposes within this ST.
+
+FCS_RNG.1 Random number generation
+Hierarchical to:Dependencies:-
+
+J-TACHO_SecurityTarget_Lite
+
+FCS_RNG.1.1 The TSF shall provide a [deterministic]
+
+15
+
+random number generator that implements:
+
+(DRG.3.1)
+
+if initialized with a random seed [using a PTRNG of class PTG.2 as random
+16
+source] the internal state of the RNG shall [have at least 100 bits of min17
+entropy]
+
+(DRG.3.2)
+
+The RNG provides forward secrecy
+
+(DRG.3.3)
+
+The RNG provides backward secrecy even if the current internal state is
+known.
+
+FCS_RNG.1.2 The TSF shall provide random numbers that meet:
+32
+
+(DRG.3.4)
+
+The RNG initialized with a random seed [during every startup and after 2
+18
+34 19
+requests] , generates output for which [more than 2 ] strings of bit length
+-16 20
+128 are mutually different with probability [w>1-2 ] .
+
+(DRG.3.5)
+
+Statistical test suites cannot practically distinguish the random numbers from
+output sequences of an ideal RNG. The random numbers must pass test
+21
+procedure A [and the NIST statistical test suite [NIST_800-22]]
+
+Class FIA Identification and authentication
+
+FIA_UAU.1/2nd Timing of authentication
+Hierarchical to:Dependencies: FIA_UID.1 Timing of Identification
+FIA_UAU.1.1/2nd The TSF shall allow [
+a. Driver card, workshop card – export of user data with security attributes (card data download
+function) and export of user data without security attributes as allowed by the applicable
+access rules in [EU_2016_165] Annex 1C, Appendix 2;
+b. Control card, company card – export of user data without security attributes as allowed by
+the applicable access rules in [EU_2016_165] Annex 1C, Appendix 2]
+on behalf of the user to be performed before the user is authenticated.
+FIA_UAU.1.2/2nd The TSF shall require each user to be successfully authenticated using the
+method described in [EU_2016_165] Annex 1C, Appendix 11, Chapter 10 before allowing any
+other TSF-mediated actions on behalf of that user.
+Application note: FIA_UAU.1.1/2nd a) allows non secured readers to get signed downloaded data
+from driver and workshop cards, without any previous authentication. This can be used by company
+download tools, which are considered as "other devices" in the sense of this ST. Such download
+
+16
+
+selection: physical, non-physical true, deterministic, hybrid physical, hybrid deterministic]
+
+[selection: using a PTRNG of class PTG.2 as random source, using a PTRNG of class PTG.3 as random
+source, using an NPTRNG of class NTG.1 [assignment: other requirements for seeding]]
+17
+[selection: have [assignment: amount of entropy], have [assignment: work factor], require [assignment: guess
+work]]
+18
+[assignment: requirements for seeding]
+19
+[assignment: number of strings]
+20
+[assignment: probability]
+21
+[assignment: additional test suites]
+
+J-TACHO_SecurityTarget_Lite
+
+tools, and also vehicle units, are also allowed to read driver and workshop card data in a non
+secured mode (without any previous authentication). This is allowed by [EU_2016_165] Annex 1C,
+Appendix 2 access rules (see section 4, access rules = 'ALW'). Similarly, FIA_UAU.1.1/2nd b) allows
+"other devices" (without having performed any authentication) to access data from control and
+company cards, following [EU_2016_165] Annex 1C, Appendix 2, Section 4 access rules.
+
+Class FPT Protection of the TSF
+
+FPT_TDC.1/2nd Inter-TSF basic TSF data consistency
+Hierarchical to:Dependencies:FPT_TDC.1.1/2nd The TSF shall provide the capability to consistently interpret [secure messaging
+attributes as defined by [EU_2016_165] Annex 1C, Appendix 11] when shared between the TSF and
+another trusted IT product a vehicle unit.
+FPT_TDC.1.2/2nd The TSF shall use [the interpretation rules (communication protocols) as defined
+by [EU_2016_165] Annex 1C, Appendix 11] when interpreting the TSF data from another trusted IT
+product a vehicle unit.
+
+9.2.4
+
+Class FTP Trusted path/channels
+
+FTP_ITC.1/2nd Inter-TSF trusted channel
+Hierarchical to:Dependencies:FTP_ITC.1.1/2nd The TSF shall provide a communications channel between itself and the vehicle
+unit that is logically distinct from other communication channels and provides assured identification
+of its end points and protection of the channel data from modification or disclosure.
+FTP_ITC.1.2/2nd The TSF shall permit [another trusted IT product] to initiate communication via the
+trusted channel.
+FTP_ITC.1.3/2nd The TSF shall initiate communication via use the trusted channel for [all
+commands and responses exchanged with a vehicle unit after successful chip authentication and
+until the end of the session].
+Application note: The requirements for establishing the trusted channel are given in [EU_2016_165]
+Appendix 11, Chapter 10 (for 2nd generation vehicle units).
+
+9.3
+
+Security functional requirements for external communications (1st generation)
+
+The following requirements shall be met only when the TOE is communicating with 1st generation
+vehicle units.
+
+J-TACHO_SecurityTarget_Lite
+
+Class FCS Cryptographic support
+
+FCS_CKM.1/1st Cryptographic key generation
+Hierarchical to:Dependencies:[FCS_CKM.2 Cryptographic key distribution
+or FCS_COP.1 Cryptographic operation]
+FCS_CKM.4 Cryptographic key destruction
+FCS_CKM.1.1/1st The TSF shall generate keys in accordance with a specified key generation
+algorithm [cryptographic key derivation algorithms specified in [EU_2016_165] Annex 1C, Appendix
+11, Section 4 (for the secure messaging session key)] and specified cryptographic key sizes [112
+bits] that meet the following: [two-key TDES as specified in [EU_2016_165] Annex 1C, Appendix 11
+Part A, Chapter 3].
+
+FCS_CKM.2/1st Cryptographic key distribution
+Hierarchical to:Dependencies:[FDP_ITC.1 Import of user data without security attributes
+or FDP_ITC.2 Import of user data with security attributes
+orFCS_CKM.1 Cryptographic key generation]
+FCS_CKM.4 Cryptographic key destruction
+FCS_CKM.2.1/1st The TSF shall distribute cryptographic keys in accordance with a specified key
+distribution method [for triple DES session keys as specified in [EU_2016_165] Annex 1C, Appendix
+11 Part A] that meets the following [[EU_2016_165] Annex 1C, Appendix 11 Part A, Chapter 3].
+
+FCS_CKM.4/1st Cryptographic key destruction
+Hierarchical to:Dependencies:[FDP_ITC.1 Import of user data without security attributes
+orFDP_ITC.2 Import of user data with security attributes
+orFCS_CKM.1 Cryptographic key generation]
+FCS_CKM.4.1/1st The TSF shall destroy cryptographic keys in accordance with a specified
+22
+cryptographic key destruction method [physical deletion by overwriting the memory data]
+that
+meets the following [
+• Requirements in [PP_TACHO], Table 16 and Table 17 ;
+• Temporary private and secret cryptographic keys are destroyed in a manner that removes all
+traces of the keying material so that it cannot be recovered by either physical or electronic
+means.
+23
+• [none] .
+
+FCS_COP.1/1st_TDES Cryptographic operation
+Hierarchical to:Dependencies:[FDP_ITC.1 Import of data without security attributes,
+or FDP_ITC.2 Import of user data with security attributes,
+cryptographic key destruction method]
+list of standard]
+
+J-TACHO_SecurityTarget_Lite
+
+or FCS_CKM.1 Cryptographic key generation]
+FCS_CKM.4 Cryptographic key destruction
+FCS_COP.1.1/1st_TDES The TSF shall perform [the cryptographic operations (encryption,
+decryption, Retail-MAC)] in accordance with a specified cryptographic algorithm [Triple DES] and
+cryptographic key sizes [112 bits] that meet the following: [[EU_2016_165] Annex 1C, Appendix 11
+Part A, Chapter 3].
+
+FCS_COP.1/1st_RSA Cryptographic operation
+Hierarchical to:Dependencies:[FDP_ITC.1 Import of data without security attributes,
+or FDP_ITC.2 Import of user data with security attributes,
+or FCS_CKM.1 Cryptographic key generation]
+FCS_CKM.4 Cryptographic key destruction
+FCS_COP.1.1/1st_RSA The TSF shall perform [the cryptographic operations (encryption,
+decryption, signing, verification)] in accordance with a specified cryptographic algorithm [RSA] and
+cryptographic key sizes [1024 bits] that meet the following: [[EU_2016_165] Annex 1C, Appendix 11
+Part A, Chapter 3].
+
+FCS_COP.1/1st_SHA-1 Cryptographic operation
+Hierarchical to:Dependencies:[FDP_ITC.1 Import of data without security attributes,
+or FDP_ITC.2 Import of user data with security attributes,
+or FCS_CKM.1 Cryptographic key generation]
+FCS_CKM.4 Cryptographic key destruction
+FCS_COP.1.1/1st_SHA-1 The TSF shall perform [cryptographic hashing] in accordance with a
+specified cryptographic algorithm [SHA-1] and cryptographic key sizes [not applicable] that meet the
+following: [Federal Information Processing Standards Publication FIPS PUB 180-4: Secure Hash
+Standard (SHS)].
+
+Class FIA Identification and authentication
+
+FIA_UAU.1/1st Timing of authentication
+Hierarchical to:Dependencies:FIA_UID.1 Timing of Identification
+FIA_UAU.1.1/1st The TSF shall allow [
+a. Driver card, workshop card – export of user data with security attributes (digital signature
+used in card data download function, see [EU_2016_165] Annex 1C, Appendix 11, Chapters
+6 and 14)) and export of user data without security attributes as allowed by the applicable
+access rules in [EU_2016_165] Annex 1C, Appendix 2;
+b. Control card, company card – export of user data without security attributes as allowed by
+the applicable access rules in [EU_2016_165] Annex 1C, Appendix 2]
+on behalf of the user to be performed before the user is authenticated.
+
+J-TACHO_SecurityTarget_Lite
+
+FIA_UAU.1.2/1st The TSF shall require each user to be successfully authenticated using the
+method described in [EU_2016_165] Annex 1C, Appendix 11, Chapter 5 before allowing any
+other TSF-mediated actions on behalf of that user.
+
+Class FPT Protection of the TSF
+
+FPT_TDC.1/1st Inter-TSF basic TSF data consistency
+Hierarchical to:Dependencies:FPT_TDC.1.1/1st The TSF shall provide the capability to consistently interpret [secure messaging
+attributes as defined by [EU_2016_165] Annex 1C, Appendix 11 Chapter 5] when shared between
+the TSF and another trusted IT product a vehicle unit.
+FPT_TDC.1.2/1st The TSF shall use [the interpretation rules (communication protocols) as defined
+by [EU_2016_165] Annex 1C, Appendix 11 Part A, Chapter 5] when interpreting the TSF data from
+another trusted IT product a vehicle unit.
+
+Class FTP Trusted path/channels
+
+FTP_ITC.1/1st Inter-TSF trusted channel
+Hierarchical to:Dependencies:FTP_ITC.1.1/1st The TSF shall provide a communications channel between itself and another
+trusted IT product the vehicle unit that is logically distinct from other communication channels and
+provides assured identification of its end points and protection of the channel data from modification
+or disclosure.
+FTP_ITC.1.2/1st The TSF shall permit [another trusted IT product] to initiate communication via the
+trusted channel.
+FTP_ITC.1.3/1st The TSF shall initiate communication via use the trusted channel for [data import
+from and export to a vehicle unit in accordance with [EC1360_2002] Appendix 2].
+Application note: The requirements for establishing the trusted channel are given in
+[EU_2016_165]Appendix 11, Chapter 5 (for 1st generation vehicle units).
+
+J-TACHO_SecurityTarget_Lite
+
+9.4
+
+TOE Security assurance requirements
+
+The assurance level for this protection profile is EAL4 augmented by the assurance components
+ATE_DPT.2 and AVA_VAN.5, as defined in [CC3].
+These security assurance requirements are derived from [EU_2016_165] Annex 1C, Appendix 10
+(SEC_006).
+ASSURANCE CLASS
+
+ASSURANCE COMPONENTS
+
+Table 17: Security Assurance Requirements - EAL 4 extended with ATE_DPT.2 and AVA_VAN.5
+
+9.5
+
+Security assurance requirements rationale
+
+J-TACHO_SecurityTarget_Lite
+
+[PP_TACHO]
+
+
+
+
+COMPONENT
+
+DEPENDENCIES REQUIRED BY
+CC PART 3 [CC3]
+
+DEPENDENCY SATISFIED BY
+
+ATE_DPT.2
+
+Table 18: SARs' dependencies (additional to EAL4 only)
+
+9.6
+9.6.1
+
+Security requirements rationale
+
+Rationale for SFRs’ dependencies
+
+SFR
+
+DEPENDENCIES
+
+RATIONALE
+
+J-TACHO_SecurityTarget_Lite
+
+SFRs’ for Tachograph Card
+
+SFRs’ specific to 2
+
+nd
+
+generation Tachograph Card
+
+J-TACHO_SecurityTarget_Lite
+
+st
+
+SFRs’ specific to 1 generation Tachograph Card
+
+Table 19: SFRs’ dependencies
+Note 1: The dependency FAU_GEN.1 (Audit Data Generation) is not applicable to the TOE.
+Tachograph cards do not generate audit records but react with an error response. The detection of
+failure events implicitly covered in FAU_SAA.1 is clarified by a related refinement of the SFR.
+Note 2: The access control TSF specified in FDP_ACF.1 uses security attributes that are defined
+during the Personalisation Phase, and are fixed over the whole lifetime of the TOE. No management
+of these security attributes (i.e. SFR FMT_MSA.3) is necessary here, either during personalization,
+or within the usage phase of the TOE. This argument holds for both FDP_ACF.1 and FDP_ITC.1.
+
+9.6.2
+
+Rationale tables of security objectives and SFRs
+The Table 20 provides an overview for security functional requirements coverage also giving an
+evidence for sufficiency and necessity of the SFRs chosen.
+
+J-TACHO_SecurityTarget_Lite
+
+Selective proof of origin
+
+FDP_ACC.2
+
+FIA_AFL.1(C)
+
+Complete access control
+Security attribute based access
+control
+Basic data authentication
+Export of user data without security
+attributes
+Export of user data with security
+attributes
+Import of user data without security
+attributes
+Import of user data with security
+attributes
+Subset residual information
+protection
+Stored data integrity monitoring and
+action
+Authentication failure handling
+
+FIA_AFL.1(WC)
+
+Authentication failure handling
+
+FIA_ATD.1
+
+User attribute definition
+
+FIA_UAU.3
+
+FIA_USB.1
+
+Unforgeable authentication
+Single-use authentication
+mechanism
+User authentication before any
+action
+User-subject binding
+
+FPR_UNO.1
+
+Unobservability
+
+FPT_EMS.1
+
+FPT_PHP.3
+
+TOE emanation
+Failure with preservation of secure
+state
+Resistance to physical attack
+
+FPT_TST.1
+
+TSF testing
+
+FDP_ACF.1
+FDP_DAU.1
+FDP_ETC.1
+FDP_ETC.2
+FDP_ITC.1
+FDP_ITC.2
+FDP_RIP.1
+FDP_SDI.2
+
+FIA_UAU.4
+FIA_UID.2
+
+FPT_FLS.1
+
+SFRs’ specific to 2
+
+nd
+
+x
+
+x
+
+x
+
+x
+
+x
+
+x
+
+x
+
+x
+
+x
+
+x
+
+x
+
+x
+x
+x
+x
+x
+x
+
+x
+
+x
+
+x
+x
+x
+x
+x
+
+x
+
+x
+
+x
+
+x
+
+x
+x
+x
+
+x
+
+x
+
+x
+
+x
+x
+
+x
+x
+
+x
+x
+
+x
+x
+x
+
+x
+
+x
+x
+
+x
+
+generation Tachograph Card
+
+FCS_CKM.1/2nd
+
+Cryptographic key generation
+
+x
+
+x
+
+FCS_CKM.2/2nd
+
+Cryptographic key distribution
+
+x
+
+x
+
+FCS_CKM.4/2nd
+
+Cryptographic key destruction
+
+x
+
+x
+
+FCS_COP.1/AES_2nd
+
+x
+
+x
+
+FCS_COP.1/SHA-2_2nd
+
+x
+
+x
+
+x
+x
+
+x
+x
+
+FCS_COP.1/ECC_2nd
+FCS_RNG.1
+
+Random number generation
+
+FIA_UAU.1/2nd
+
+Timing of authentication
+Inter-TSF basic TSF data
+consistency
+
+FPT_TDC.1/2nd
+
+O.Software_Update
+
+x
+
+x
+x
+x
+x
+
+O.Crypto_Implement
+
+x
+
+O.Protect_Secret
+
+x
+x
+
+O.Secure_Communications
+
+FCO_NRO.1
+
+x
+x
+
+O.Data_Access
+
+Potential violation analysis
+
+O.Card_Activity_Storage
+
+Security alarms
+
+FAU_SAA.1
+
+O.Card_Identification_Data
+FAU_ARP.1
+
+x
+x
+
+J-TACHO_SecurityTarget_Lite
+
+O.Software_Update
+
+O.Crypto_Implement
+
+O.Secure_Communications
+
+O.Data_Access
+
+O.Protect_Secret
+
+O.Card_Activity_Storage
+
+O.Card_Identification_Data
+FTP_ITC.1/2nd
+
+x
+
+Inter-TSF trusted channel
+
+SFRs’ specific to 1st generation Tachograph Card
+FCS_CKM.1/1st
+
+Cryptographic key generation
+
+x
+
+x
+
+FCS_CKM.2/1st
+
+Cryptographic key distribution
+
+x
+
+x
+
+FCS_CKM.4/1st
+
+Cryptographic key destruction
+
+x
+
+x
+
+FCS_COP.1/1st_TDES
+
+Cryptographic operation
+
+x
+
+x
+
+FCS_COP.1/1st_RSA
+
+Cryptographic operation
+
+x
+
+x
+
+x
+
+x
+
+FCS_COP.1/1st_SHA-1 Cryptographic operation
+FIA_UAU.1/1st
+
+x
+
+Timing of authentication
+Inter-TSF basic TSF data
+consistency
+Inter-TSF trusted channel
+
+FPT_TDC.1/1st
+FTP_ITC.1/1st
+
+x
+x
+
+Table 20: Coverage of security objectives for the TOE by SFRs
+A detailed justification required for suitability of the security functional requirements to achieve the
+security objectives is given in Table 21.
+Security Objective
+
+SFR
+
+Rationale
+
+J-TACHO_SecurityTarget_Lite
+
+J-TACHO_SecurityTarget_Lite
+
+J-TACHO_SecurityTarget_Lite
+
+Table 21: Suitability of the SFRs
+
+9.7
+
+Security requirements – internal consistency
+
+This part of the security requirements rationale shows that the set of security requirements for the
+TOE consisting of the security functional requirements (SFRs) and the security assurance
+requirements (SARs) together form an internally consistent whole.
+
+(SFRs)
+The dependency analysis in section 9.6.1 for the security functional requirements shows that the
+basis for internal consistency between all defined functional requirements is satisfied. All
+dependencies between the chosen functional components are analysed and non-satisfied
+dependencies are appropriately explained.
+All subjects and objects addressed by more than one SFR in sec. 9 are also treated in a consistent
+way: the SFRs impacting them do not require any contradictory property and behaviour of these
+‘shared’ items. The current PP [PP_TACHO] accurately reflects the requirements of EU Parliament
+and Council Regulation 165/2014, Annex I C [EU_2016_165], which is assumed to be internally
+consistent.
+
+(SARs)
+The assurance package EAL4 is a pre-defined set of internally consistent assurance requirements.
+The dependency analysis for the assurance components in section 9.5 shows that the assurance
+requirements are internally consistent, because all (additional) dependencies are satisfied and no
+inconsistency appears.
+Inconsistency between functional and assurance requirements could only arise, if there are
+functional-assurance dependencies being not met – an opportunity having been shown not to arise
+in sections 9.6 and 9.5. Furthermore, as also discussed in section 9.5 the chosen assurance
+components are adequate for the functionality of the TOE. So, there are no inconsistencies between
+the goals of these two groups of security requirements.
+
+J-TACHO_SecurityTarget_Lite
+
+10.
+
+TOE summary specification (ASE_TSS)
+The TOE provides the following security functionality :
+
+
+
+
+
+
+These Security Functions are implemented by the realization of the Security Functional
+requirements, according to chap. 9. The details of the implementation of this TOE security
+functionality are provided in the following sections.
+
+10.1
+
+Statement of the TOE security functionality
+
+10.1.1 SF_Auth
+
+Vehicle Unit, other device and Personalization agent Authentication
+
+The TOE implements an authentication mechanism to authenticate external entities and to assign
+roles right and security attributes (FIA_UID.2, FIA_ATD.1, FIA_USB.1). The external entities are the
+Vehicle Unit and Other Device see Table 4.
+The purpose of the TSF SF_AUTH is to authenticate the user before any action is
+allowed/performed (FIA_UID.2).
+The authentication mechanism implements an authentication failure mechanism according to SFRs
+(FIA_AFL.1(C) and FIA_AFL.1(WC), FAU_ARP.1, FAU_SAA.1).
+The authentication mechanism avoid the use of forged or copied or reuse of authentication data
+(FIA_UAU.3, FIA_UAU.4).
+The authentication mechanism is based on the authentication methods described in [EU_2016_165]
+Annex 1C, Appendix 11, Chapter 10 (FIA_UAU.1/2nd) and [EU_2016_165] Annex 1C, Appendix 11,
+Chapter 5 (FIA_UAU.1/1st).
+
+composite product integration
+
+Tacho_AGD_PRE
+
+J-TACHO_SecurityTarget_Lite
+
+10.1.2 SF_SM
+
+Secure Messaging
+
+The TOE implements the thrusted channel based on secure messaging security function providing
+confidentiality and integrity of transferred data with authenticated external entities according to the
+SFRs (FTP.ITC.1/2nd, FTP.ITC.1/1st, FTP.TDC.1/2nd, FTP.TDC.1/1st).
+The secure messaging is using AES and 3DES algorithms for encryption/decryption and MAC
+computation according to SFRs (FCS_COP.1.1/AES_2nd, FCS_COP.1.1/1st_TDES).
+The secure messaging is using algorithm AES and cryptographic key sizes 128, 192, 256 bits
+according to SFRs (FCS_COP.1.1/AES_2nd).
+The secure messaging is using algorithm TDES and cryptographic key sizes 112 bits according to
+SFRs (FCS_COP.1.1/1st_TDES).
+
+10.1.3 SF_AC
+
+Access Control
+
+The TOE implements a data access control mechanism to allow/deny the execution of operations on
+objects to external entities/subjects (FDP_ACC.2, FDP_ACF.1).
+The TSF SF_AC checks that for each operation initiated by a subject on objects the security
+attributes for that roles authorization are satisfied (FDP_ACC.2, FDP_ACF.1).
+The TSF SF_AC security function covers the management of subject an object as defined in
+(FDP_ACC.2, FDP_ACF.1). The operations allowed are defined in (FDP_ACF.1).
+The TSF SF_AC satisfy the SFRs (FDP_ETC.1,FDP_ETC.2,FDP_ITC.1,FDP_ITC.2) for what
+concern the import/export of user data with/without related security attributes.
+
+10.1.4 SF_KCS
+
+Key Derivation, Cryptographic and Data Signature
+
+The TOE implements the SF_KCS for the support of key derivation, cryptographic and data
+signature functionalities.
+The TSF SF_KCS implements a cryptographic key generation, distribution and destruction
+mechanism according to SFRs (FCS_CKM.1/2nd, FCS_CKM.2/2nd, FCS_CKM.4/2nd,
+FCS_CKM.1/1st, FCS_CKM.2/1st and FCS_CKM.4/1st).
+The TSF SF_KCS implements cryptographic functionalities with the support of algorithm AES with
+cryptographic key sizes 128, 192, 256 bits according to SF (FCS_COP.1/AES_2nd).
+The TSF SF_KCS implements cryptographic functionalities with the support of algorithm TDES with
+cryptographic key sizes 112 bits according to SF (FCS_COP.1/1st_TDES).
+The TSF SF_KCS implements encryption/decryption, data signature generation/verification and
+cryptographic key agreement with the support of algorithm based on ECC (ECDSA, ECKA-EG) with
+cryptographic key sizes 256, 384, 512, 521 bits according to SFRs (FCS_COP.1/ECC_2nd,
+FCO_NRO.1).
+The TSF SF_KCS implements encryption/decryption and data signature generation/verification with
+the support of algorithm RSA with cryptographic key sizes 1024 bits according to SFRs
+(FCS_COP.1/1st_RSA, FCO_NRO.1).
+
+J-TACHO_SecurityTarget_Lite
+
+The TSF SF_KCS implements hashing cryptographic functionalities with the support of algorithm
+SHA-256, SHA-384 and SHA-512 according to SFR (FCS_COP.1/SHA-2_2nd).
+The TSF SF_KCS implements hashing cryptographic functionalities with the support of algorithm
+SHA-1 according to SFR (FCS_COP.1/1st_SHA-1).
+The TSF SF_KCS implements a deterministic random number generator according to SFR
+(FCS_RNG.1).
+
+10.1.5 SF_DProt
+
+Data Protection
+
+This TOE Security Function Data Protection is responsible for protection of the TSF data, user data,
+and TSF functionality.
+The TSF SF_DProt Data Protection is composed of software implementations of test and security
+functionalities to protect data, detect data corruption and preserve a secure TOE status.
+Performing self-tests of the TOE at each power-up including a set of tests to verify that the
+underlying cryptographic algorithms are operating correctly (FPT_TST.1)
+Initializing memory after reset and Initializing memory of de-allocated data and secure destruction of
+cryptographic key, secrets and private material (FCS_CKM.4, FDP_RIP.1).
+Protecting and monitoring the integrity of all stored user data and preventing use of corrupted data
+by stopping the operation involved and setting an error (FDP_SDI.2, FAU_ARP.1, FAU_SAA.1).
+Protecting confidentiality of sensible stored user data, cryptographic keys and residual cryptographic
+key information, by storing sensible information ciphered and by clearing all the buffers used for
+computations by randomizing their contents (FPR_UNO.1).
+The TSF preserves the secure state after sensitive processing failure (RNG, power loss, memory or
+functional failure) or potential physical tampering or intrusion detection (FPT_FLS.1, FPT_PHP.3)
+This TSF enforces protection of cryptographic key data during cryptographic functions processing
+and Key Generation, against state-of-the-art attacks, including IC power consumption analysis
+(FPT_EMS.1).
+
+10.1.6 SF_OSPlat
+
+Java Platform and OS
+
+This TSF is implemented at SW layer JCS and Kernel. Here the TSF is described as a single and
+cumulative security function representing the following sub-functions which services and
+characteristics are reported below in the description: SF.SECURE_MANAGEMENT,
+SF.CRYPTO_KEY, SF.CRYPTO_OP, SF.TRANSACTION, SF.PIN and SF.OBJECT_DELETION.
+The
+provides optimized services for data integrity, memory management, I/O functions, atomic
+data transaction, cryptographic support, test and management of HW peripheral of
+ST31G480 D01 including crypto library NESLIB V.6.2.1
+Secure Management functionalities (SF.SECURE_MANAGEMENT) such as:
+
+FDP_RIP.1
+
+J-TACHO_SecurityTarget_Lite
+
+
+
+
+NVRAM
+FAU_SAA.1, FPT_FLS.1
+
+NVRAM
+FAU_SAA.1, FPR_PHP.3
+
+
+
+
+FAU_SAA.1, FPT_TST.1
+
+Crypto Key management functionalities (SF.CRYPTO_KEY) such as
+
+
+
+FDP_RIP.1
+
+
+
+FDP_SDI.2)
+
+Crypto Operation (SF.CRYPTO_OP):
+
+
+
+
+
+
+
+
+Data Transaction management (SF.TRANSACTION):
+
+PIN management (SF.PIN):
+
+J-TACHO_SecurityTarget_Lite
+
+NVRAM
+
+
+
+
+
+This security functionality also guarantees the integrity of the stored PIN value, try counter and
+verification status (s
+FDP_SDI.2, FIA_AFL.1/WC .
+Secure data deletion (SF.OBJECT_DELETION):
+FDP_RIP.1)
+
+(s
+
+J-TACHO_SecurityTarget_Lite
+
+SF_OSPlat
+
+x
+x
+
+SF_DProt
+
+FAU_ARP.1
+FAU_SAA.1
+FCO_NRO.1
+FDP_ACC.2
+FDP_ACF.1
+FDP_DAU.1
+FDP_ETC.1
+FDP_ETC.2
+FDP_ITC.1
+FDP_ITC.2
+FDP_RIP.1
+FDP_SDI.2
+FIA_AFL.1/C
+FIA_AFL.1/WC
+FIA_ATD.1
+FIA_UAU.3
+FIA_UAU.4
+FIA_UID.2
+FIA_USB.1
+FPR_UNO.1
+FPT_EMS.1
+FPT_FLS.1
+FPT_PHP.3
+FPT_TST.1
+
+SF_KCS
+
+SF
+
+SF_AC
+
+SFR
+
+SF_SM
+
+TOE summary specification rationale
+
+SF_AUTH
+
+10.2
+
+x
+x
+
+x
+
+x
+x
+
+x
+x
+
+x
+x
+x
+x
+x
+x
+x
+x
+
+x
+x
+x
+x
+x
+x
+x
+
+x
+x
+
+x
+x
+x
+x
+
+x
+x
+x
+x
+x
+
+x
+
+x
+x
+x
+x
+x
+x
+x
+
+x
+x
+
+x
+x
+
+x
+x
+
+x
+x
+x
+x
+x
+x
+
+x
+x
+x
+x
+x
+x
+
+FCS_RNG.1
+
+x
+
+x
+x
+x
+x
+x
+x
+x
+
+x
+
+x
+
+x
+
+x
+x
+x
+
+x
+x
+
+x
+x
+
+J-TACHO_SecurityTarget_Lite
+
+Table 22 - Mapping of Security Functional Requirements (SFRs) on TOE Security Functions (TSFs)
+
+11.
+
+QUALITY REQUIREMENTS
+
+12.
+
+ENVIRONMENTAL/ECOLOGICAL REQUIREMENTS
+
+J-TACHO_SecurityTarget_Lite
+
+
