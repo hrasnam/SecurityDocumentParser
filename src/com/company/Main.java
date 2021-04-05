@@ -22,7 +22,7 @@ public class Main {
         importPdfFile(args[0]);
         jsonInitialization();
         numberOfLines = countLines(inputFile);
-
+        findBibliography();
         if (args[1].contains("version")) { //.matches detects separate word
             System.out.println("version detected");
             findVersions();
@@ -87,7 +87,7 @@ public class Main {
         });
     }
 
-    private static void findBibliography() {			//Kunal
+    private static void findBibliography() throws IOException {			//Kunal
 int startingLine=0, endingLine=0, temp=0;
 	BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
         for(int i = 1; i < numberOfLines+1; ++i){
