@@ -87,7 +87,55 @@ public class Main {
         });
     }
 
-    private static void findBibliography() { //Kunal
+    private static void findBibliography() {			//Kunal
+int startingLine=0, endingLine=0, temp=0;
+	BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+        for(int i = 1; i < numberOfLines+1; ++i){
+            String currentLine = reader.readLine();
+		Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)|(INDEX)");
+            Matcher matcher = pattern.matcher(currentLine);
+            
+		while(matcher.matches()){
+                startingLine=i;
+		break;
+            }
+        }
+	BufferedReader reader2 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+	String currentLineN ="";
+	for(int i = 1; i < numberOfLines+1; ++i){
+            currentLineN = reader2.readLine();
+		Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)|(INDEX)");
+            Matcher matcher = pattern.matcher(currentLineN);
+            
+		while(matcher.find()){
+		temp=i;
+		currentLineN=reader2.readLine();
+		break;
+            }
+        }
+	String[] nextHeading=currentLineN.split(" ");
+	String nextFindHeading=nextHeading[0];
+
+	BufferedReader reader3 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+	for(int i = 1; i < numberOfLines+1; ++i){
+            String currentLine = reader3.readLine();
+		Pattern pattern = Pattern.compile(nextFindHeading);
+            Matcher matcher = pattern.matcher(currentLine);
+            
+		while(matcher.matches() && temp!=i){
+                endingLine=i;
+		break;
+            }
+        }
+BufferedReader reader4 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+		for(int i = 1; i < numberOfLines+1; ++i){
+            String currentLine = reader4.readLine();
+            while(i>=startingLine && i<endingLine){
+                
+                System.out.println(currentLine);
+            }
+        }
+
     }
 
     private static void findTableOfContents() throws Exception { // Mikita
