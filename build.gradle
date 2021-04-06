@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+group 'org.company'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+dependencies {
+    implementation 'junit:junit:4.12'
+    implementation 'com.google.code.gson:gson:2.8.6'
+// https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox
+    implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.23'
+
+}

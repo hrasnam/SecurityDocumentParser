@@ -1,5 +1,6 @@
 package com.company;
 
+import com.google.gson.Gson;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -17,11 +18,13 @@ import java.util.regex.Pattern;
 public class Main {
     static File inputFile = null;
     static int numberOfLines = 0;
+    //json init
+    Gson gson = new Gson();
 
     public static void main(String[] args) throws Exception {
         importPdfFile(args[0]);
-        jsonInitialization();
         numberOfLines = countLines(inputFile);
+        findTitle();
         findBibliography();
         if (args[1].contains("version")) { //.matches detects separate word
             System.out.println("version detected");
@@ -46,10 +49,45 @@ public class Main {
         exportToJSON();
     }
 
-    private static void jsonInitialization() {
-    } //Marek ...
-
     private static void findTitle() {
+        Map<String, String> patternMap = new HashMap<>();
+        patternMap.put("title", "^[\\s\\S]*?(?=\\bSecurity Target Lite\\b)");
+        patternMap.put("title", "^[\\s\\S]*?(?=\\bfrom\\b)");
+        //add more cases
+
+
+
+        int titleLinesLimiter = 40; //max first 40 lines
+        patternMap.forEach((key, value) -> {
+            ArrayList<String> matches = new ArrayList<>();
+            Pattern pattern = Pattern.compile(value);
+            System.out.println(key + ":");
+            Iterator<String> lineIterator = null;
+            try {
+                lineIterator = Files.lines(Paths.get(inputFile.getPath())).iterator();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            int i = 0;
+            while (i < titleLinesLimiter) {
+                assert lineIterator != null;
+                if (!lineIterator.hasNext()) break;
+                String line = lineIterator.next();
+                Matcher matcher = pattern.matcher(line);
+                while(matcher.find()){
+                    if(!matches.contains(matcher.group())){
+                        matches.add(matcher.group());
+                    }
+                }
+                i++;
+            }
+            matches.forEach(System.out::println);
+
+            if (matches.size() != 0) {
+                //title has been found, do not try more patterns
+                return;
+            }
+        });
     } //Marek
 
     private static void findVersions(){ // Mikita
