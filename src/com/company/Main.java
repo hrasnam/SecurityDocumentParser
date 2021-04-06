@@ -92,7 +92,7 @@ int startingLine=0, endingLine=0, temp=0;
 	BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
         for(int i = 1; i < numberOfLines+1; ++i){
             String currentLine = reader.readLine();
-		Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)|(INDEX)");
+		Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)");
             Matcher matcher = pattern.matcher(currentLine);
             
 		while(matcher.matches()){
