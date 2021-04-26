@@ -1,9 +1,6 @@
 package com.company;
 
-import com.google.gson.Gson;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
-
+import org.json.simple.JSONObject;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,40 +8,23 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//      Expected input:
-//      path title versions other
-//      path all
-
 public class Main {
     static File inputFile = null;
+    static JSONObject jsonObject;
     static int numberOfLines = 0;
-    //json init
-    Gson gson = new Gson();
+    static ArrayList<File> files = new ArrayList<>();
+
+    private static boolean toFindTitle = false;
+    private static boolean toFindTableOfContents = false;
+    private static boolean toFindVersions = false;
+    private static boolean toFindRevisions = false;
+    private static boolean toFindBibliography = false;
+    private static boolean toFindOther = false;
 
     public static void main(String[] args) throws Exception {
-        importPdfFile(args[0]);
-        numberOfLines = countLines(inputFile);
-        findTitle();
-        findBibliography();
-        if (args[1].contains("version")) { //.matches detects separate word
-            System.out.println("version detected");
-            findVersions();
-        }
-
-        if (args[1].contains("table")) { //.matches detects separate word
-            System.out.println("table detected");
-            findTableOfContents();
-        }
-
-        if (args[1].contains("all")) { //.matches detects separate word
-            System.out.println("all detected");
-            findVersions();
-            findTableOfContents();
-            findTitle();
-            findBibliography();
-            findOther();
-            findRevisions();
-        }
+        String[] argsTemp = {"./InputFiles/example1.txt", "versions"};
+        JSONInitialization();
+        inputArgumentsExecutor(argsTemp);
 
         exportToJSON();
     }
@@ -54,7 +34,6 @@ public class Main {
         patternMap.put("title", "^[\\s\\S]*?(?=\\bSecurity Target Lite\\b)");
         patternMap.put("title", "^[\\s\\S]*?(?=\\bfrom\\b)");
         //add more cases
-
 
 
         int titleLinesLimiter = 40; //max first 40 lines
@@ -74,8 +53,8 @@ public class Main {
                 if (!lineIterator.hasNext()) break;
                 String line = lineIterator.next();
                 Matcher matcher = pattern.matcher(line);
-                while(matcher.find()){
-                    if(!matches.contains(matcher.group())){
+                while (matcher.find()) {
+                    if (!matches.contains(matcher.group())) {
                         matches.add(matcher.group());
                     }
                 }
@@ -90,7 +69,7 @@ public class Main {
         });
     } //Marek
 
-    private static void findVersions(){ // Mikita
+    private static void findVersions() { // Mikita
         Map<String, String> patternMap = new HashMap<>();
         patternMap.put("eal", "EAL+\\s?+[0-9]+\\+?");
         patternMap.put("global_platform", "GlobalPlatform\\s?\\d\\.\\d\\.\\d");
@@ -103,7 +82,6 @@ public class Main {
         patternMap.forEach((key, value) -> {
             ArrayList<String> matches = new ArrayList<>();
             Pattern pattern = Pattern.compile(value);
-            System.out.println(key + ":");
             Iterator<String> lineIterator = null;
             try {
                 lineIterator = Files.lines(Paths.get(inputFile.getPath())).iterator();
@@ -115,61 +93,67 @@ public class Main {
                 if (!lineIterator.hasNext()) break;
                 String line = lineIterator.next();
                 Matcher matcher = pattern.matcher(line);
-                while(matcher.find()){
-                    if(!matches.contains(matcher.group())){
+                while (matcher.find()) {
+                    if (!matches.contains(matcher.group())) {
                         matches.add(matcher.group());
                     }
                 }
             }
-            matches.forEach(System.out::println);
+            StringBuilder temp = new StringBuilder();
+            for(String string: matches){
+                temp.append(string).append(" ");
+            }
+            jsonObject.put(key, temp.toString());
+            System.out.println("Key: " + key + " \nString: " + temp);
         });
+
     }
 
-    private static void findBibliography() throws IOException {			//Kunal
-int startingLine=0, endingLine=0, temp=0;
-	BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-        for(int i = 1; i < numberOfLines+1; ++i){
+    private static void findBibliography() throws IOException { //Kunal
+        int startingLine = 0, endingLine = 0, temp = 0;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+        for (int i = 1; i < numberOfLines + 1; ++i) {
             String currentLine = reader.readLine();
-		Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)");
+            Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)");
             Matcher matcher = pattern.matcher(currentLine);
-            
-		while(matcher.matches()){
-                startingLine=i;
-		break;
-            }
-        }
-	BufferedReader reader2 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-	String currentLineN ="";
-	for(int i = 1; i < numberOfLines+1; ++i){
-            currentLineN = reader2.readLine();
-		Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)|(INDEX)");
-            Matcher matcher = pattern.matcher(currentLineN);
-            
-		while(matcher.find()){
-		temp=i;
-		currentLineN=reader2.readLine();
-		break;
-            }
-        }
-	String[] nextHeading=currentLineN.split(" ");
-	String nextFindHeading=nextHeading[0];
 
-	BufferedReader reader3 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-	for(int i = 1; i < numberOfLines+1; ++i){
-            String currentLine = reader3.readLine();
-		Pattern pattern = Pattern.compile(nextFindHeading);
-            Matcher matcher = pattern.matcher(currentLine);
-            
-		while(matcher.matches() && temp!=i){
-                endingLine=i;
-		break;
+            while (matcher.matches()) {
+                startingLine = i;
+                break;
             }
         }
-BufferedReader reader4 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-		for(int i = 1; i < numberOfLines+1; ++i){
+        BufferedReader reader2 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+        String currentLineN = "";
+        for (int i = 1; i < numberOfLines + 1; ++i) {
+            currentLineN = reader2.readLine();
+            Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)|(INDEX)");
+            Matcher matcher = pattern.matcher(currentLineN);
+
+            while (matcher.find()) {
+                temp = i;
+                currentLineN = reader2.readLine();
+                break;
+            }
+        }
+        String[] nextHeading = currentLineN.split(" ");
+        String nextFindHeading = nextHeading[0];
+
+        BufferedReader reader3 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+        for (int i = 1; i < numberOfLines + 1; ++i) {
+            String currentLine = reader3.readLine();
+            Pattern pattern = Pattern.compile(nextFindHeading);
+            Matcher matcher = pattern.matcher(currentLine);
+
+            while (matcher.matches() && temp != i) {
+                endingLine = i;
+                break;
+            }
+        }
+
+        BufferedReader reader4 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+        for (int i = 1; i < numberOfLines + 1; ++i) {
             String currentLine = reader4.readLine();
-            while(i>=startingLine && i<endingLine){
-                
+            while (i >= startingLine && i < endingLine) {
                 System.out.println(currentLine);
             }
         }
@@ -179,11 +163,11 @@ BufferedReader reader4 = new BufferedReader(new InputStreamReader(new FileInputS
     private static void findTableOfContents() throws Exception { // Mikita
         //TODO
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-        for(int i = 1; i < numberOfLines+1; ++i){
+        for (int i = 1; i < numberOfLines + 1; ++i) {
             String currentLine = reader.readLine();
             Pattern pattern = Pattern.compile("(Contents)|(CONTENTS)|(INDEX)");
             Matcher matcher = pattern.matcher(currentLine);
-            while(matcher.find()){
+            while (matcher.find()) {
                 System.out.println("Line number: " + i);
                 System.out.println(currentLine);
             }
@@ -197,20 +181,149 @@ BufferedReader reader4 = new BufferedReader(new InputStreamReader(new FileInputS
     private static void findOther() {
     }
 
-    private static void exportToJSON() {
+    private static void JSONInitialization() {
+        jsonObject = new JSONObject();
     }
 
-    private static void importPdfFile(String path) throws IOException { //Mikita
-        inputFile = new File(path);
-        PDDocument doc = PDDocument.load(inputFile);
-        PDFTextStripper stripper = new PDFTextStripper();
+    private static void exportToJSON() throws IOException {
+        Pattern pattern = Pattern.compile("[ \\w-]+\\.");
+        Matcher matcher = pattern.matcher(inputFile.getName());
+        String jsonFileName;
+        if(matcher.find()){
+           jsonFileName = matcher.group() + "json";
+        } else {
+            jsonFileName = "output.json";
+        }
+        FileWriter file = new FileWriter(jsonFileName);
+        if (jsonObject == null) {
+            System.err.println("Nothing to write to JSON, empty file saved");
+        } else {
+            file.write(jsonObject.toJSONString());
+        }
+        file.close();
+    }
 
-        File convertedToTxtFile = new File("./temp.txt");
-        FileWriter writer = new FileWriter(convertedToTxtFile);
-        writer.write(stripper.getText(doc));
-        writer.flush();
+    private static void inputArgumentsExecutor(String[] args) throws Exception { // Mikita
+        inputArgumentsInspector(args);
+        for (File file : files) {
+            inputFile = file;
+            numberOfLines = countLines(inputFile);
 
-        inputFile = convertedToTxtFile;
+            if (toFindTitle)
+                findTitle();
+            if (toFindTableOfContents)
+                findTableOfContents();
+            if (toFindVersions)
+                findVersions();
+            if (toFindRevisions)
+                findRevisions();
+            if (toFindBibliography)
+                findBibliography();
+            if (toFindOther)
+                findOther();
+        }
+    }
+
+    private static void inputArgumentsInspector(String[] args) { //Mikita
+        boolean correctArguments = true;
+        String correctInputExample = "Example: text.txt TiTlE Table of contents file.txt [...]";
+        while (true) {
+            if (!correctArguments) {
+                args = inputArgumentsReader();
+            }
+            if (args == null) {
+                System.err.println("Input is empty, please, write your arguments again");
+                System.err.println(correctInputExample);
+                correctArguments = false;
+                continue;
+            }
+            if (!detectSubparts(args)) {
+                System.err.println("Input finder didn't detect any subparts, please, write your arguments again");
+                System.err.println(correctInputExample);
+                correctArguments = false;
+                continue;
+            }
+            if (!detectFilePath(args)) {
+                System.err.println("Input finder didn't detect any files, please, try again");
+                System.err.println(correctInputExample);
+                correctArguments = false;
+                continue;
+            }
+            break;
+        }
+    }
+
+    private static String[] inputArgumentsReader() { //Mikita
+        System.out.println("Write arguments again, please: ");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String inputString = null;
+        try {
+            inputString = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assert inputString != null;
+        char[] array = inputString.toCharArray();
+        ArrayList<String> list = new ArrayList<>();
+        StringBuilder tempString = new StringBuilder();
+        for (int i = 0; i < inputString.length(); i++) {
+            if (array[i] == ' ' || i == inputString.length() - 1) {
+                list.add(tempString.toString());
+                tempString = new StringBuilder();
+                continue;
+            }
+            tempString.append(array[i]);
+        }
+        String[] args = new String[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            args[i] = list.get(i);
+        }
+        return args;
+    }
+
+    private static boolean detectFilePath(String[] args) { //Mikita
+        boolean success = false;
+        for (String string : args) {
+            if (new File(string).isFile()) {
+                files.add(new File(string));
+                success = true;
+            }
+        }
+        return success;
+    }
+
+    private static boolean detectSubparts(String[] args) { //Mikita
+        StringBuilder unitedString = new StringBuilder();
+        boolean success = false;
+        for (String string : args) {
+            unitedString.append(string).append(" ");
+        }
+        if (unitedString.toString().matches("(?i)(.*)title(.*)")) {
+            toFindTitle = true;
+            success = true;
+        }
+        if (unitedString.toString().matches("(?i)(.*)(Table)( of contents)?(.*)")) {
+            toFindTableOfContents = true;
+            success = true;
+        }
+        if (unitedString.toString().matches("(?i)(.*)(Versions)( of used libraries)?(.*)")) {
+            toFindVersions = true;
+            success = true;
+        }
+        if (unitedString.toString().matches("(?i)(.*)Revisions(.*)")) {
+            toFindRevisions = true;
+            success = true;
+        }
+        if (unitedString.toString().matches("(?i)(.*)Bibliography(.*)")) {
+            toFindBibliography = true;
+            success = true;
+        }
+        if (unitedString.toString().matches("(?i)(.*)Other(.*)")) {
+            toFindOther = true;
+            success = true;
+        }
+        return success;
     }
 
     public static int countLines(File file) throws IOException { //Mikita
