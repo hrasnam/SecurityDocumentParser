@@ -1,5 +1,6 @@
 package com.company;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import java.io.*;
 import java.nio.file.Files;
@@ -10,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class Main {
     static File inputFile = null;
-    static JSONObject jsonObject;
+
     static int numberOfLines = 0;
     static ArrayList<File> files = new ArrayList<>();
 
@@ -21,15 +22,29 @@ public class Main {
     private static boolean toFindBibliography = false;
     private static boolean toFindOther = false;
 
-    public static void main(String[] args) throws Exception {
-        String[] argsTemp = {"./InputFiles/example1.txt", "versions"};
-        JSONInitialization();
+    private static JSONObject jsonObject = new JSONObject();
+    private static JSONObject jsonTitle = new JSONObject();
+    private static JSONObject jsonTable = new JSONObject();
+    private static JSONObject jsonVersions = new JSONObject();
+    private static JSONObject jsonRevisions = new JSONObject();
+    private static JSONObject jsonBibliography = new JSONObject();
+    private static JSONObject jsonOther= new JSONObject();
+
+    public static void main(String[] args) throws Exception { // Mikita
+        String[] argsTemp = {"./InputFiles/example2.txt", "--versions", "--title", "--other", "--table", "--revisions", "--bibliography"};
+
         inputArgumentsExecutor(argsTemp);
+
+        jsonTitle.put("Title", "STM32");
+        jsonOther.put("Smth", "Other");
+        jsonBibliography.put("1", "Introduction");
+        jsonTable.put("WHAT", "HELLLOO");
+        jsonRevisions.put("Rev.0.1", "01.02.03");
 
         exportToJSON();
     }
 
-    private static void findTitle() {
+    private static void findTitle() { //Marek
         Map<String, String> patternMap = new HashMap<>();
         patternMap.put("title", "^[\\s\\S]*?(?=\\bSecurity Target Lite\\b)");
         patternMap.put("title", "^[\\s\\S]*?(?=\\bfrom\\b)");
@@ -99,64 +114,66 @@ public class Main {
                     }
                 }
             }
-            StringBuilder temp = new StringBuilder();
-            for(String string: matches){
-                temp.append(string).append(" ");
-            }
-            jsonObject.put(key, temp.toString());
-            System.out.println("Key: " + key + " \nString: " + temp);
-        });
 
+            StringBuilder temp = new StringBuilder();
+            JSONArray jsonArray = new JSONArray();
+            for(String string: matches){
+                jsonArray.add(string);
+            }
+            if(!jsonArray.isEmpty()){
+                jsonVersions.put(key, jsonArray);
+            }
+        });
     }
 
     private static void findBibliography() throws IOException { //Kunal
-        int startingLine = 0, endingLine = 0, temp = 0;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-        for (int i = 1; i < numberOfLines + 1; ++i) {
-            String currentLine = reader.readLine();
-            Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)");
-            Matcher matcher = pattern.matcher(currentLine);
-
-            while (matcher.matches()) {
-                startingLine = i;
-                break;
-            }
-        }
-        BufferedReader reader2 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-        String currentLineN = "";
-        for (int i = 1; i < numberOfLines + 1; ++i) {
-            currentLineN = reader2.readLine();
-            Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)|(INDEX)");
-            Matcher matcher = pattern.matcher(currentLineN);
-
-            while (matcher.find()) {
-                temp = i;
-                currentLineN = reader2.readLine();
-                break;
-            }
-        }
-        String[] nextHeading = currentLineN.split(" ");
-        String nextFindHeading = nextHeading[0];
-
-        BufferedReader reader3 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-        for (int i = 1; i < numberOfLines + 1; ++i) {
-            String currentLine = reader3.readLine();
-            Pattern pattern = Pattern.compile(nextFindHeading);
-            Matcher matcher = pattern.matcher(currentLine);
-
-            while (matcher.matches() && temp != i) {
-                endingLine = i;
-                break;
-            }
-        }
-
-        BufferedReader reader4 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-        for (int i = 1; i < numberOfLines + 1; ++i) {
-            String currentLine = reader4.readLine();
-            while (i >= startingLine && i < endingLine) {
-                System.out.println(currentLine);
-            }
-        }
+//        int startingLine = 0, endingLine = 0, temp = 0;
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+//        for (int i = 1; i < numberOfLines + 1; ++i) {
+//            String currentLine = reader.readLine();
+//            Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)");
+//            Matcher matcher = pattern.matcher(currentLine);
+//
+//            while (matcher.matches()) {
+//                startingLine = i;
+//                break;
+//            }
+//        }
+//        BufferedReader reader2 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+//        String currentLineN = "";
+//        for (int i = 1; i < numberOfLines + 1; ++i) {
+//            currentLineN = reader2.readLine();
+//            Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)|(INDEX)");
+//            //TODO ERROR
+//            Matcher matcher = pattern.matcher(currentLineN);
+//            while (matcher.find()) {
+//                temp = i;
+//                currentLineN = reader2.readLine();
+//                break;
+//            }
+//        }
+//        String[] nextHeading = currentLineN.split(" ");
+//        String nextFindHeading = nextHeading[0];
+//
+//        BufferedReader reader3 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+//        for (int i = 1; i < numberOfLines + 1; ++i) {
+//            String currentLine = reader3.readLine();
+//            Pattern pattern = Pattern.compile(nextFindHeading);
+//            Matcher matcher = pattern.matcher(currentLine);
+//
+//            while (matcher.matches() && temp != i) {
+//                endingLine = i;
+//                break;
+//            }
+//        }
+//
+//        BufferedReader reader4 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+//        for (int i = 1; i < numberOfLines + 1; ++i) {
+//            String currentLine = reader4.readLine();
+//            while (i >= startingLine && i < endingLine) {
+//                System.out.println(currentLine);
+//            }
+//        }
 
     }
 
@@ -181,11 +198,7 @@ public class Main {
     private static void findOther() {
     }
 
-    private static void JSONInitialization() {
-        jsonObject = new JSONObject();
-    }
-
-    private static void exportToJSON() throws IOException {
+    private static void exportToJSON() throws IOException { // Mikita
         Pattern pattern = Pattern.compile("[ \\w-]+\\.");
         Matcher matcher = pattern.matcher(inputFile.getName());
         String jsonFileName;
@@ -195,11 +208,25 @@ public class Main {
             jsonFileName = "output.json";
         }
         FileWriter file = new FileWriter(jsonFileName);
-        if (jsonObject == null) {
+
+        if (toFindTitle && !jsonTitle.toJSONString().equals("{}"))
+            jsonObject.put("title", jsonTitle); //not fully correct
+        if (toFindTableOfContents && !jsonTable.toJSONString().equals("{}"))
+            jsonObject.put("table_of_contents", jsonTable);
+        if (toFindVersions && !jsonVersions.toJSONString().equals("{}"))
+            jsonObject.put("versions", jsonVersions);
+        if (toFindRevisions && !jsonRevisions.toJSONString().equals("{}"))
+            jsonObject.put("revisions", jsonRevisions);
+        if (toFindBibliography && !jsonBibliography.toJSONString().equals("{}"))
+            jsonObject.put("bibliography", jsonBibliography);
+        if (toFindOther && !jsonOther.toJSONString().equals("{}"))
+            jsonObject.put("other", jsonOther);
+
+        if (jsonObject.toJSONString().equals("{}"))
             System.err.println("Nothing to write to JSON, empty file saved");
-        } else {
+        else
             file.write(jsonObject.toJSONString());
-        }
+
         file.close();
     }
 
@@ -285,7 +312,7 @@ public class Main {
     private static boolean detectFilePath(String[] args) { //Mikita
         boolean success = false;
         for (String string : args) {
-            if (new File(string).isFile()) {
+            if (new File(string).isFile() &&  (string.charAt(0) != '-' && string.charAt(1) != '-')){
                 files.add(new File(string));
                 success = true;
             }
@@ -297,32 +324,35 @@ public class Main {
         StringBuilder unitedString = new StringBuilder();
         boolean success = false;
         for (String string : args) {
-            unitedString.append(string).append(" ");
+            if (string.charAt(0) == '-' && string.charAt(1) == '-') {
+                unitedString.append(string).append(" ");
+            }
+            if (string.matches("(?i)--Title")) {
+                toFindTitle = true;
+                success = true;
+            }
+            if (string.matches("(?i)(--Table)(.of.contents)?")) {
+                toFindTableOfContents = true;
+                success = true;
+            }
+            if (string.matches("(?i)(--Versions)(.of.used.libraries)?")) {
+                toFindVersions = true;
+                success = true;
+            }
+            if (string.matches("(?i)--Revisions")) {
+                toFindRevisions = true;
+                success = true;
+            }
+            if (string.matches("(?i)--Bibliography")) {
+                toFindBibliography = true;
+                success = true;
+            }
+            if (string.matches("(?i)--Other")) {
+                toFindOther = true;
+                success = true;
+            }
         }
-        if (unitedString.toString().matches("(?i)(.*)title(.*)")) {
-            toFindTitle = true;
-            success = true;
-        }
-        if (unitedString.toString().matches("(?i)(.*)(Table)( of contents)?(.*)")) {
-            toFindTableOfContents = true;
-            success = true;
-        }
-        if (unitedString.toString().matches("(?i)(.*)(Versions)( of used libraries)?(.*)")) {
-            toFindVersions = true;
-            success = true;
-        }
-        if (unitedString.toString().matches("(?i)(.*)Revisions(.*)")) {
-            toFindRevisions = true;
-            success = true;
-        }
-        if (unitedString.toString().matches("(?i)(.*)Bibliography(.*)")) {
-            toFindBibliography = true;
-            success = true;
-        }
-        if (unitedString.toString().matches("(?i)(.*)Other(.*)")) {
-            toFindOther = true;
-            success = true;
-        }
+
         return success;
     }
 
