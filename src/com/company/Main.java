@@ -88,7 +88,7 @@ public class Main {
         }
     }
 
-    private static void findVersions() { // Mikita
+    private static void findVersions(){ // Mikita
         Map<String, String> patternMap = new HashMap<>();
         patternMap.put("eal", "EAL+\\s?+[0-9]+\\+?");
         patternMap.put("global_platform", "GlobalPlatform\\s?\\d\\.\\d\\.\\d");
@@ -127,7 +127,7 @@ public class Main {
         });
     }
 
-    private static void findBibliography() throws IOException { //Kunal
+    private static void findBibliography()  { //Kunal
 //        int startingLine = 0, endingLine = 0, temp = 0;
 //        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
 //        for (int i = 1; i < numberOfLines + 1; ++i) {
