@@ -65,7 +65,6 @@ public class Main {
         ArrayList<String> matches = new ArrayList<>();
         patternMap.forEach((key, value) -> {
             Pattern pattern = Pattern.compile(value);
-//            System.out.println(key + ":");
             String content = null;
             try {
                 content = getSearchString(inputFile, titleLinesLimiter, 0);
@@ -79,7 +78,6 @@ public class Main {
                         matches.add(matcher.group());
                     }
                 }
-//                matches.forEach(System.out::println);
             });
 
         if (!matches.isEmpty()) {
@@ -238,7 +236,39 @@ public class Main {
     private static void findRevisions() { // ?
     }
 
-    private static void findOther() { // ?
+    private static void findOther() { // Mikita
+        Map<String, String> patternMap = new HashMap<>();
+        patternMap.put("certid", "NSCIB[\\w-]{3,}");
+
+        for (Map.Entry<String, String> entry : patternMap.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            ArrayList<String> matches = new ArrayList<>();
+            Pattern pattern = Pattern.compile(value);
+            Iterator<String> lineIterator = null;
+            try {
+                lineIterator = Files.lines(Paths.get(inputFile.getPath())).iterator();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            while (true) {
+                assert lineIterator != null;
+                if (!lineIterator.hasNext()) break;
+                String line = lineIterator.next();
+                Matcher matcher = pattern.matcher(line);
+                while (matcher.find()) {
+                    if (!matches.contains(matcher.group())) {
+                        matches.add(matcher.group());
+                    }
+                }
+            }
+
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.addAll(matches);
+            if (!jsonArray.isEmpty()) {
+                jsonOther.put(key, jsonArray);
+            }
+        }
     }
 
     private static void exportToJSON() throws IOException { // Mikita
@@ -392,6 +422,15 @@ public class Main {
                 success = true;
             }
             if (string.matches("(?i)--Other")) {
+                toFindOther = true;
+                success = true;
+            }
+            if (string.matches("(?i)--All")) {
+                toFindTitle = true;
+                toFindTableOfContents = true;
+                toFindRevisions = true;
+                toFindBibliography = true;
+                toFindVersions = true;
                 toFindOther = true;
                 success = true;
             }
