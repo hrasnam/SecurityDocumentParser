@@ -23,7 +23,7 @@ public class Main {
     private static boolean toFindOther = false;
 
     private static final JSONObject jsonObject = new JSONObject();
-    private static final JSONObject jsonTitle = new JSONObject();
+    private static String titleStringToJson = "";
     private static final JSONObject jsonTable = new JSONObject();
     private static final JSONObject jsonVersions = new JSONObject();
     private static final JSONObject jsonRevisions = new JSONObject();
@@ -35,11 +35,6 @@ public class Main {
 
         inputArgumentsExecutor(argsTemp);
 
-        jsonTitle.put("Title", "STM32");
-        jsonOther.put("Smth", "Other");
-        jsonBibliography.put("1", "Introduction");
-        jsonTable.put("WHAT", "HELLLOO");
-        jsonRevisions.put("Rev.0.1", "01.02.03");
 
         exportToJSON();
     }
@@ -49,7 +44,6 @@ public class Main {
         patternMap.put("title1", "^[\\s\\S]*?(?=\\bSecurity Target Lite\\b)");
         patternMap.put("title2", "^[\\s\\S]*?(?=\\bfrom\\b)");
         //add more cases
-
 
         int titleLinesLimiter = 40; //max first 40 lines
         patternMap.forEach((key, value) -> {
@@ -81,6 +75,7 @@ public class Main {
                 //title has been found, do not try more patterns
                 return;
             }
+            titleStringToJson = "Title";
         });
     } //Marek
 
@@ -191,10 +186,10 @@ public class Main {
 
     }
 
-    private static void findRevisions() {
+    private static void findRevisions() { // ?
     }
 
-    private static void findOther() {
+    private static void findOther() { // ?
     }
 
     private static void exportToJSON() throws IOException { // Mikita
@@ -208,8 +203,8 @@ public class Main {
         }
         FileWriter file = new FileWriter(jsonFileName);
 
-        if (toFindTitle && !jsonTitle.toJSONString().equals("{}"))
-            jsonObject.put("title", jsonTitle); //not fully correct
+        if (toFindTitle && !(titleStringToJson == null || titleStringToJson.isEmpty() ))
+            jsonObject.put("title", titleStringToJson); //not fully correct
         if (toFindTableOfContents && !jsonTable.toJSONString().equals("{}"))
             jsonObject.put("table_of_contents", jsonTable);
         if (toFindVersions && !jsonVersions.toJSONString().equals("{}"))
