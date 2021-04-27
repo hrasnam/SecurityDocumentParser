@@ -39,45 +39,52 @@ public class Main {
         exportToJSON();
     }
 
+    private static String getTitleSearchString(File inputFile, int numberOfLines) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+        StringBuilder stringBuilder = new StringBuilder();
+        String line = null;
+        String ls = System.getProperty("line.separator");
+        int i = 0;
+        while ((line = reader.readLine()) != null && i < numberOfLines) {
+            stringBuilder.append(line);
+            stringBuilder.append(ls);
+            i++;
+        }
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        reader.close();
+        return stringBuilder.toString();
+    }
     private static void findTitle() { //Marek
         Map<String, String> patternMap = new HashMap<>();
         patternMap.put("title1", "^[\\s\\S]*?(?=\\bSecurity Target Lite\\b)");
         patternMap.put("title2", "^[\\s\\S]*?(?=\\bfrom\\b)");
         //add more cases
-
         int titleLinesLimiter = 40; //max first 40 lines
+        ArrayList<String> matches = new ArrayList<>();
         patternMap.forEach((key, value) -> {
-            ArrayList<String> matches = new ArrayList<>();
             Pattern pattern = Pattern.compile(value);
             System.out.println(key + ":");
-            Iterator<String> lineIterator = null;
+            String content = null;
             try {
-                lineIterator = Files.lines(Paths.get(inputFile.getPath())).iterator();
+                content = getTitleSearchString(inputFile, titleLinesLimiter);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            int i = 0;
-            while (i < titleLinesLimiter) {
-                assert lineIterator != null;
-                if (!lineIterator.hasNext()) break;
-                String line = lineIterator.next();
-                Matcher matcher = pattern.matcher(line);
+            Matcher matcher = pattern.matcher(content);
                 while (matcher.find()) {
                     if (!matches.contains(matcher.group())) {
                         matches.add(matcher.group());
                     }
                 }
-                i++;
-            }
-            matches.forEach(System.out::println);
+                matches.forEach(System.out::println);
+            });
 
-            if (matches.size() != 0) {
-                //title has been found, do not try more patterns
-                return;
-            }
-            titleStringToJson = "Title";
-        });
-    } //Marek
+        if (!matches.isEmpty()) {
+            titleStringToJson = matches.get(0);
+        } else {
+            titleStringToJson = "No title parsed";
+        }
+    }
 
     private static void findVersions() { // Mikita
         Map<String, String> patternMap = new HashMap<>();
