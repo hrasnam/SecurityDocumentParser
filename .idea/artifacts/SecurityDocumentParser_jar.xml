@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="SecurityDocumentParser:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SecurityDocumentParser_jar</output-path>
+    <root id="archive" name="Parser.jar">
+      <element id="module-output" name="SecurityDocumentParser" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libraries/json-simple-1.1.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

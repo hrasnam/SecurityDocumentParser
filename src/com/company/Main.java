@@ -31,10 +31,7 @@ public class Main {
     private static final JSONObject jsonOther= new JSONObject();
 
     public static void main(String[] args) throws Exception { // Mikita
-        String[] argsTemp = {"./InputFiles/example2.txt", "--versions", "--title", "--other", "--table", "--revisions", "--bibliography"};
-
-        inputArgumentsExecutor(argsTemp);
-
+        inputArgumentsExecutor(args);
 
         exportToJSON();
     }
@@ -54,6 +51,7 @@ public class Main {
         reader.close();
         return stringBuilder.toString();
     }
+
     private static void findTitle() { //Marek
         Map<String, String> patternMap = new HashMap<>();
         patternMap.put("title1", "^[\\s\\S]*?(?=\\bSecurity Target Lite\\b)");
@@ -81,8 +79,6 @@ public class Main {
 
         if (!matches.isEmpty()) {
             titleStringToJson = matches.get(0);
-        } else {
-            titleStringToJson = "No title parsed";
         }
     }
 
@@ -254,25 +250,25 @@ public class Main {
 
     private static void inputArgumentsInspector(String[] args) { //Mikita
         boolean correctArguments = true;
-        String correctInputExample = "Example: text.txt TiTlE Table of contents file.txt [...]";
+        String correctInputExample = "Example: text.txt --title --Table_of_contents file.txt [...] (or \"exit\").";
         while (true) {
             if (!correctArguments) {
                 args = inputArgumentsReader();
             }
             if (args == null) {
-                System.err.println("Input is empty, please, write your arguments again");
+                System.err.println("Input is empty, please, write your arguments again.");
                 System.err.println(correctInputExample);
                 correctArguments = false;
                 continue;
             }
             if (!detectSubparts(args)) {
-                System.err.println("Input finder didn't detect any subparts, please, write your arguments again");
+                System.err.println("Input finder didn't detect any subparts, please, write your arguments again.");
                 System.err.println(correctInputExample);
                 correctArguments = false;
                 continue;
             }
             if (!detectFilePath(args)) {
-                System.err.println("Input finder didn't detect any files, please, try again");
+                System.err.println("Input finder didn't detect any files, please, try again.");
                 System.err.println(correctInputExample);
                 correctArguments = false;
                 continue;
@@ -292,6 +288,8 @@ public class Main {
         }
 
         assert inputString != null;
+        if(inputString.equals("exit"))
+            System.exit(0);
         char[] array = inputString.toCharArray();
         ArrayList<String> list = new ArrayList<>();
         StringBuilder tempString = new StringBuilder();
