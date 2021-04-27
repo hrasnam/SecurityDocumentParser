@@ -32,14 +32,12 @@ public class Main {
 
     public static void main(String[] args) throws Exception { // Mikita
         inputArgumentsExecutor(args);
-
-
     }
 
     private static String getTitleSearchString(File inputFile, int numberOfLines) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         StringBuilder stringBuilder = new StringBuilder();
-        String line = null;
+        String line;
         String ls = System.getProperty("line.separator");
         int i = 0;
         while ((line = reader.readLine()) != null && i < numberOfLines) {
@@ -61,20 +59,21 @@ public class Main {
         ArrayList<String> matches = new ArrayList<>();
         patternMap.forEach((key, value) -> {
             Pattern pattern = Pattern.compile(value);
-            System.out.println(key + ":");
+//            System.out.println(key + ":");
             String content = null;
             try {
                 content = getTitleSearchString(inputFile, titleLinesLimiter);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            assert content != null;
             Matcher matcher = pattern.matcher(content);
                 while (matcher.find()) {
                     if (!matches.contains(matcher.group())) {
                         matches.add(matcher.group());
                     }
                 }
-                matches.forEach(System.out::println);
+//                matches.forEach(System.out::println);
             });
 
         if (!matches.isEmpty()) {
@@ -117,9 +116,7 @@ public class Main {
             }
 
             JSONArray jsonArray = new JSONArray();
-            for(String string: matches){
-                jsonArray.add(string);
-            }
+            jsonArray.addAll(matches);
             if(!jsonArray.isEmpty()){
                 jsonVersions.put(key, jsonArray);
             }
@@ -174,7 +171,6 @@ public class Main {
 //                System.out.println(currentLine);
 //            }
 //        }
-
     }
 
     private static void findTableOfContents() throws Exception { // Mikita
@@ -185,8 +181,8 @@ public class Main {
             Pattern pattern = Pattern.compile("(Contents)|(CONTENTS)|(INDEX)");
             Matcher matcher = pattern.matcher(currentLine);
             while (matcher.find()) {
-                System.out.println("Line number: " + i);
-                System.out.println(currentLine);
+//                System.out.println("Line number: " + i);
+//                System.out.println(currentLine);
             }
         }
 
@@ -224,8 +220,10 @@ public class Main {
 
         if (jsonObject.toJSONString().equals("{}"))
             System.err.println("Nothing to write to JSON, empty file saved");
-        else
+        else {
             file.write(jsonObject.toJSONString());
+            System.out.println(jsonFileName + " was successfully created in root directory.");
+        }
 
         file.close();
     }
@@ -254,7 +252,7 @@ public class Main {
 
     private static void inputArgumentsInspector(String[] args) { //Mikita
         boolean correctArguments = true;
-        String correctInputExample = "Example: text.txt --Title --Table_of_contents file.txt [...] (or \"exit\")";
+        String correctInputExample = "Example: text.txt --Title --Table_of_contents file.txt [...] (or \"exit\").";
         while (true) {
             if (!correctArguments) {
                 args = inputArgumentsReader();
