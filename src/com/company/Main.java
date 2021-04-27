@@ -80,7 +80,10 @@ public class Main {
             });
 
         if (!matches.isEmpty()) {
-            titleStringToJson = matches.get(0);
+            String result = matches.get(0);
+            result = result.replaceAll("[ ]+", " ");
+            result = result.replaceAll("[\\s|\\t|\\r\\n]+", " ").trim();
+            titleStringToJson = result;
         } else {
             titleStringToJson = "No title parsed";
         }
