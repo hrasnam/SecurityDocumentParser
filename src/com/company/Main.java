@@ -36,7 +36,7 @@ public class Main {
         inputArgumentsExecutor(args);
     }
 
-    private static String getSearchString(File inputFile, int numberOfLines, int startLine) throws IOException {
+    private static String getSearchString(File inputFile, int startLine) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         StringBuilder stringBuilder = new StringBuilder();
         String line;
@@ -61,13 +61,13 @@ public class Main {
         patternMap.put("title1", "^[\\s\\S]*?(?=\\bSecurity Target Lite\\b)");
         patternMap.put("title2", "^[\\s\\S]*?(?=\\bfrom\\b)");
         //add more cases
-        int titleLinesLimiter = 40; //max first 40 lines
+        //max first 40 lines
         ArrayList<String> matches = new ArrayList<>();
         patternMap.forEach((key, value) -> {
             Pattern pattern = Pattern.compile(value);
             String content = null;
             try {
-                content = getSearchString(inputFile, titleLinesLimiter, 0);
+                content = getSearchString(inputFile, 0);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -83,7 +83,7 @@ public class Main {
         if (!matches.isEmpty()) {
             String result = matches.get(0);
             result = result.replaceAll("[ ]+", " ");
-            result = result.replaceAll("[\\s|\\t|\\r\\n]+", " ").trim();
+            result = result.replaceAll("[\\s|\\t\\r\\n]+", " ").trim();
             titleStringToJson = result;
         }
     }
@@ -129,14 +129,14 @@ public class Main {
 
     private static void findBibliography() throws IOException { //Kunal
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-        Pattern pattern = Pattern.compile("[A-Z1-9]+.*\\s(Bibliography[^.]*)|(BIBLIOGRAPHY[^\\.]*)");
-        Pattern pattern2 = Pattern.compile("^[\\s\\S]*?(?=\\n\\n)");
+        Pattern pattern = Pattern.compile("[A-Z1-9]+.*\\s(Bibliography[^.]*)|(BIBLIOGRAPHY[^.]*)");
+//        Pattern pattern2 = Pattern.compile("^[\\s\\S]*?(?=\\n\\n)");
         int i = 1;
         for (; i < numberOfLines + 1; ++i) {
             String currentLine = reader.readLine();
             Matcher matcher = pattern.matcher(currentLine);
             if (matcher.find()) {
-                System.out.println(i);
+//                System.out.println(i);
             }
         }
 //        int startingLine = 0, endingLine = 0, temp = 0;
@@ -207,7 +207,7 @@ public class Main {
             maxContentsLines = numberOfLines - i;
         }
         if (i + maxContentsLines <  numberOfLines) {
-            String searchString = getSearchString(inputFile, maxContentsLines, i);
+            String searchString = getSearchString(inputFile, i);
             Matcher matcher = pattern2.matcher(searchString);
             while (matcher.find()) {
                 sanitizeTOC(matcher.group());
@@ -220,34 +220,34 @@ public class Main {
         result = result.replaceAll("[.]{2,}", "@"); //replace 2+ dots with a single space
         result = result.replaceAll("[ ]+", " ").trim(); //replace multiple spaces by one space
         result = result.replaceAll("\\n\\s", "\n");
-        //result = result.replaceAll("[\\s|\\t|\\r\\n]+", " ").trim();
-        System.out.println(result);
+//        result = result.replaceAll("[\\s|\\t|\\r\\n]+", " ").trim();
+//        System.out.println(result);
         String[]lines = result.split("\\n");
-        String finalEntry = "[";
+        StringBuilder finalEntry = new StringBuilder("[");
         for (String line : lines) {
             String[] pageNumberSplit = line.split("@");
             String[] idSplit = pageNumberSplit[0].split(" ");
             String id = idSplit[0];
-            String name = "";
+            StringBuilder name = new StringBuilder();
             for (int i = 1; i < idSplit.length; i++) {
-                name += idSplit[i];
+                name.append(idSplit[i]);
             }
             try {
-                Integer pageNumber = Integer.valueOf(pageNumberSplit[pageNumberSplit.length - 1]);
+                int pageNumber = Integer.parseInt(pageNumberSplit[pageNumberSplit.length - 1]);
                 String entry = "[\"" + id + "\", \"" + name + "\", " + pageNumber + "],";
-                finalEntry += entry;
+                finalEntry.append(entry);
             } catch (NumberFormatException e) {
                 //e.printStackTrace();
             }
         }
 
-        finalEntry = finalEntry.substring(0, finalEntry.length()-1);
+        finalEntry = new StringBuilder(finalEntry.substring(0, finalEntry.length() - 1));
         if (finalEntry.length() == 0) {
-            finalEntry += "[";
+            finalEntry.append("[");
         }
-        finalEntry += "]";
+        finalEntry.append("]");
 
-        jsonTable = (JSONArray) JSONValue.parse(finalEntry);
+        jsonTable = (JSONArray) JSONValue.parse(finalEntry.toString());
     }
 
     private static void findRevisions() { // ?
