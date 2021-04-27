@@ -207,9 +207,6 @@ public class Main {
                 break;
             }
         }
-
-
-
     }
 
     private static void sanitizeTOC(String result) {
@@ -219,7 +216,6 @@ public class Main {
         //result = result.replaceAll("[\\s|\\t|\\r\\n]+", " ").trim();
         System.out.println(result);
         String[]lines = result.split("\\n");
-        JSONArray tableOfContents = new JSONArray();
         String finalEntry = "[";
         for (String line : lines) {
             String[] pageNumberSplit = line.split("@");
@@ -236,8 +232,7 @@ public class Main {
         }
         finalEntry = finalEntry.substring(0, finalEntry.length()-1);
         finalEntry += "]";
-        JSONArray jsonEntry = (JSONArray) JSONValue.parse(finalEntry);
-        jsonTable = jsonEntry;
+        jsonTable = (JSONArray) JSONValue.parse(finalEntry);
     }
 
     private static void findRevisions() { // ?
