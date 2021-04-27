@@ -128,17 +128,6 @@ public class Main {
     }
 
     private static void findBibliography() throws IOException { //Kunal
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-        Pattern pattern = Pattern.compile("[A-Z1-9]+.*\\s(Bibliography[^.]*)|(BIBLIOGRAPHY[^.]*)");
-//        Pattern pattern2 = Pattern.compile("^[\\s\\S]*?(?=\\n\\n)");
-        int i = 1;
-        for (; i < numberOfLines + 1; ++i) {
-            String currentLine = reader.readLine();
-            Matcher matcher = pattern.matcher(currentLine);
-            if (matcher.find()) {
-//                System.out.println(i);
-            }
-        }
 //        int startingLine = 0, endingLine = 0, temp = 0;
 //        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
 //        for (int i = 1; i < numberOfLines + 1; ++i) {
