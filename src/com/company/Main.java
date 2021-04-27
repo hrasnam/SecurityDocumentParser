@@ -2,6 +2,8 @@ package com.company;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,7 +26,7 @@ public class Main {
 
     private static final JSONObject jsonObject = new JSONObject();
     private static String titleStringToJson = "";
-    private static final JSONObject jsonTable = new JSONObject();
+    private static JSONArray jsonTable = new JSONArray();
     private static final JSONObject jsonVersions = new JSONObject();
     private static final JSONObject jsonRevisions = new JSONObject();
     private static final JSONObject jsonBibliography = new JSONObject();
@@ -34,12 +36,16 @@ public class Main {
         inputArgumentsExecutor(args);
     }
 
-    private static String getTitleSearchString(File inputFile, int numberOfLines) throws IOException {
+    private static String getSearchString(File inputFile, int numberOfLines, int startLine) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         StringBuilder stringBuilder = new StringBuilder();
         String line;
         String ls = System.getProperty("line.separator");
         int i = 0;
+        while (i < startLine) {
+            reader.readLine();
+            i++;
+        }
         while ((line = reader.readLine()) != null && i < numberOfLines) {
             stringBuilder.append(line);
             stringBuilder.append(ls);
@@ -62,7 +68,7 @@ public class Main {
 //            System.out.println(key + ":");
             String content = null;
             try {
-                content = getTitleSearchString(inputFile, titleLinesLimiter);
+                content = getSearchString(inputFile, titleLinesLimiter, 0);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -176,16 +182,62 @@ public class Main {
     private static void findTableOfContents() throws Exception { // Mikita
         //TODO
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-        for (int i = 1; i < numberOfLines + 1; ++i) {
+        Pattern pattern = Pattern.compile("(Contents)|(CONTENTS)|(INDEX)");
+        Pattern pattern2 = Pattern.compile("^[\\s\\S]*?(?=\\n\\n)");
+        int i = 1;
+        for (; i < numberOfLines + 1; ++i) {
             String currentLine = reader.readLine();
-            Pattern pattern = Pattern.compile("(Contents)|(CONTENTS)|(INDEX)");
             Matcher matcher = pattern.matcher(currentLine);
-            while (matcher.find()) {
-//                System.out.println("Line number: " + i);
-//                System.out.println(currentLine);
+            if (matcher.find()) {
+                System.out.println("Line number: " + i);
+                System.out.println(currentLine);
+                break;
             }
         }
 
+        int maxContentsLines = 500;
+        if (i + maxContentsLines > numberOfLines) {
+            maxContentsLines = numberOfLines - i;
+        }
+        if (i + maxContentsLines <  numberOfLines) {
+            String searchString = getSearchString(inputFile, maxContentsLines, i);
+            Matcher matcher = pattern2.matcher(searchString);
+            while (matcher.find()) {
+                sanitizeTOC(matcher.group());
+                break;
+            }
+        }
+
+
+
+    }
+
+    private static void sanitizeTOC(String result) {
+        result = result.replaceAll("[.]{2,}", "@"); //replace 2+ dots with a signle space
+        result = result.replaceAll("[ ]+", " ").trim(); //replace multiple spaces by one space
+        result = result.replaceAll("\\n\\s", "\n");
+        //result = result.replaceAll("[\\s|\\t|\\r\\n]+", " ").trim();
+        System.out.println(result);
+        String[]lines = result.split("\\n");
+        JSONArray tableOfContents = new JSONArray();
+        String finalEntry = "[";
+        for (String line : lines) {
+            String[] pageNumberSplit = line.split("@");
+            String[] idSplit = pageNumberSplit[0].split(" ");
+            String id = idSplit[0];
+            String name = "";
+            for (int i = 1; i < idSplit.length; i++) {
+                name += idSplit[i];
+            }
+            Integer pageNumber = Integer.valueOf(pageNumberSplit[1]);
+            System.out.println(id + " - " + name + " - " + pageNumber);
+            String entry = "[\"" + id + "\", \"" + name + "\", " + pageNumber + "],";
+            finalEntry += entry;
+        }
+        finalEntry = finalEntry.substring(0, finalEntry.length()-1);
+        finalEntry += "]";
+        JSONArray jsonEntry = (JSONArray) JSONValue.parse(finalEntry);
+        jsonTable = jsonEntry;
     }
 
     private static void findRevisions() { // ?
