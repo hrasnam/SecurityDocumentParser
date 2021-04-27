@@ -46,7 +46,7 @@ public class Main {
             reader.readLine();
             i++;
         }
-        while ((line = reader.readLine()) != null && i < numberOfLines) {
+        while ((line = reader.readLine()) != null) {
             stringBuilder.append(line);
             stringBuilder.append(ls);
             i++;
@@ -128,6 +128,17 @@ public class Main {
     }
 
     private static void findBibliography() throws IOException { //Kunal
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+        Pattern pattern = Pattern.compile("[A-Z1-9]+.*\\s(Bibliography[^.]*)|(BIBLIOGRAPHY[^\\.]*)");
+        Pattern pattern2 = Pattern.compile("^[\\s\\S]*?(?=\\n\\n)");
+        int i = 1;
+        for (; i < numberOfLines + 1; ++i) {
+            String currentLine = reader.readLine();
+            Matcher matcher = pattern.matcher(currentLine);
+            if (matcher.find()) {
+                System.out.println(i);
+            }
+        }
 //        int startingLine = 0, endingLine = 0, temp = 0;
 //        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
 //        for (int i = 1; i < numberOfLines + 1; ++i) {
@@ -177,7 +188,7 @@ public class Main {
 //        }
     }
 
-    private static void findTableOfContents() throws Exception { // Mikita
+    private static void findTableOfContents() throws Exception { // Marek
         //TODO
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
         Pattern pattern = Pattern.compile("(Contents)|(CONTENTS)|(INDEX)");
@@ -187,8 +198,6 @@ public class Main {
             String currentLine = reader.readLine();
             Matcher matcher = pattern.matcher(currentLine);
             if (matcher.find()) {
-                System.out.println("Line number: " + i);
-                System.out.println(currentLine);
                 break;
             }
         }
@@ -208,7 +217,7 @@ public class Main {
     }
 
     private static void sanitizeTOC(String result) {
-        result = result.replaceAll("[.]{2,}", "@"); //replace 2+ dots with a signle space
+        result = result.replaceAll("[.]{2,}", "@"); //replace 2+ dots with a single space
         result = result.replaceAll("[ ]+", " ").trim(); //replace multiple spaces by one space
         result = result.replaceAll("\\n\\s", "\n");
         //result = result.replaceAll("[\\s|\\t|\\r\\n]+", " ").trim();
@@ -223,13 +232,21 @@ public class Main {
             for (int i = 1; i < idSplit.length; i++) {
                 name += idSplit[i];
             }
-            Integer pageNumber = Integer.valueOf(pageNumberSplit[1]);
-            System.out.println(id + " - " + name + " - " + pageNumber);
-            String entry = "[\"" + id + "\", \"" + name + "\", " + pageNumber + "],";
-            finalEntry += entry;
+            try {
+                Integer pageNumber = Integer.valueOf(pageNumberSplit[pageNumberSplit.length - 1]);
+                String entry = "[\"" + id + "\", \"" + name + "\", " + pageNumber + "],";
+                finalEntry += entry;
+            } catch (NumberFormatException e) {
+                //e.printStackTrace();
+            }
         }
+
         finalEntry = finalEntry.substring(0, finalEntry.length()-1);
+        if (finalEntry.length() == 0) {
+            finalEntry += "[";
+        }
         finalEntry += "]";
+
         jsonTable = (JSONArray) JSONValue.parse(finalEntry);
     }
 
