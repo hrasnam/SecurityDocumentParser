@@ -22,13 +22,13 @@ public class Main {
     private static boolean toFindBibliography = false;
     private static boolean toFindOther = false;
 
-    private static JSONObject jsonObject = new JSONObject();
-    private static JSONObject jsonTitle = new JSONObject();
-    private static JSONObject jsonTable = new JSONObject();
-    private static JSONObject jsonVersions = new JSONObject();
-    private static JSONObject jsonRevisions = new JSONObject();
-    private static JSONObject jsonBibliography = new JSONObject();
-    private static JSONObject jsonOther= new JSONObject();
+    private static final JSONObject jsonObject = new JSONObject();
+    private static final JSONObject jsonTitle = new JSONObject();
+    private static final JSONObject jsonTable = new JSONObject();
+    private static final JSONObject jsonVersions = new JSONObject();
+    private static final JSONObject jsonRevisions = new JSONObject();
+    private static final JSONObject jsonBibliography = new JSONObject();
+    private static final JSONObject jsonOther= new JSONObject();
 
     public static void main(String[] args) throws Exception { // Mikita
         String[] argsTemp = {"./InputFiles/example2.txt", "--versions", "--title", "--other", "--table", "--revisions", "--bibliography"};
@@ -46,8 +46,8 @@ public class Main {
 
     private static void findTitle() { //Marek
         Map<String, String> patternMap = new HashMap<>();
-        patternMap.put("title", "^[\\s\\S]*?(?=\\bSecurity Target Lite\\b)");
-        patternMap.put("title", "^[\\s\\S]*?(?=\\bfrom\\b)");
+        patternMap.put("title1", "^[\\s\\S]*?(?=\\bSecurity Target Lite\\b)");
+        patternMap.put("title2", "^[\\s\\S]*?(?=\\bfrom\\b)");
         //add more cases
 
 
@@ -115,7 +115,6 @@ public class Main {
                 }
             }
 
-            StringBuilder temp = new StringBuilder();
             JSONArray jsonArray = new JSONArray();
             for(String string: matches){
                 jsonArray.add(string);
@@ -321,12 +320,8 @@ public class Main {
     }
 
     private static boolean detectSubparts(String[] args) { //Mikita
-        StringBuilder unitedString = new StringBuilder();
         boolean success = false;
         for (String string : args) {
-            if (string.charAt(0) == '-' && string.charAt(1) == '-') {
-                unitedString.append(string).append(" ");
-            }
             if (string.matches("(?i)--Title")) {
                 toFindTitle = true;
                 success = true;
