@@ -1,5 +1,7 @@
 package com.company;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -73,12 +75,12 @@ public class Main {
             }
             assert content != null;
             Matcher matcher = pattern.matcher(content);
-                while (matcher.find()) {
-                    if (!matches.contains(matcher.group())) {
-                        matches.add(matcher.group());
-                    }
+            while (matcher.find()) {
+                if (!matches.contains(matcher.group())) {
+                    matches.add(matcher.group());
                 }
-            });
+            }
+        });
 
         if (!matches.isEmpty()) {
             String result = matches.get(0);
@@ -282,7 +284,7 @@ public class Main {
         Matcher matcher = pattern.matcher(inputFile.getName());
         String jsonFileName;
         if(matcher.find()){
-           jsonFileName = matcher.group() + "json";
+            jsonFileName = matcher.group() + "json";
         } else {
             jsonFileName = "output.json";
         }
@@ -304,7 +306,9 @@ public class Main {
         if (jsonObject.toJSONString().equals("{}"))
             System.err.println("Nothing to write to JSON, empty file saved");
         else {
-            file.write(jsonObject.toJSONString());
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String jsonOutput = gson.toJson(jsonObject);
+            file.write(jsonOutput);
             System.out.println(jsonFileName + " was successfully created in root directory.");
         }
 
