@@ -35,8 +35,8 @@ public class Main {
     private static final JSONObject jsonOther= new JSONObject();
 
     public static void main(String[] args) throws Exception { // Mikita
-//        inputArgumentsExecutor(inputTest());
-        inputArgumentsExecutor(args);
+        inputArgumentsExecutor(inputTest());
+//        inputArgumentsExecutor(args);
         exportToJSON();
     }
 
@@ -139,7 +139,7 @@ public class Main {
         int i = 1;
 
         do {
-            for (; i < numberOfLines + 1; ++i) {
+            for (; i < numberOfLines; ++i) {
                 String currentLine = reader.readLine();
                 Matcher matcher = pattern.matcher(currentLine);
                 if (matcher.find()) {
@@ -159,9 +159,10 @@ public class Main {
                 Matcher matcher = bibliographyEntriesPattern.matcher(searchString);
                 if (matcher.find()) {
                     ArrayList<String> entries = parseBibliography(matcher.group());
-                    for (int index = 0; index < entries.size(); index++) {
+                    for (int index = 0; index < entries.size()-1; index++) {
                         String tag = entries.get(index);
                         String value = entries.get(++index);
+                        tag = value.replace("--- new lines ---", "");
                         value = value.replace("--- new lines ---", "");
                         jsonBibliography.put(tag, value);
                     }
@@ -169,7 +170,7 @@ public class Main {
                 }
 
             }
-        } while (true);
+        } while (i < numberOfLines);
 
     }
 
@@ -243,7 +244,7 @@ public class Main {
                 String entry = "[\"" + id + "\", \"" + name + "\", " + pageNumber + "],";
                 finalEntry.append(entry);
             } catch (NumberFormatException e) {
-                System.err.println("Error: Table of content, number format exception.");
+                //System.err.println("Error: Table of content, number format exception.");
             }
         }
 
