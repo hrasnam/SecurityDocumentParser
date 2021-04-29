@@ -35,8 +35,8 @@ public class Main {
     private static final JSONObject jsonOther= new JSONObject();
 
     public static void main(String[] args) throws Exception { // Mikita
-        inputArgumentsExecutor(inputTest());
-//        inputArgumentsExecutor(args);
+//        inputArgumentsExecutor(inputTest());
+        inputArgumentsExecutor(args);
         exportToJSON();
     }
 
@@ -246,7 +246,7 @@ public class Main {
                 String entry = "[\"" + id + "\", \"" + name + "\", " + pageNumber + "],";
                 finalEntry.append(entry);
             } catch (NumberFormatException e) {
-                //System.err.println("Error: Table of content, number format exception.");
+                System.err.println("Error: Table of content, number format exception.");
             }
         }
 
