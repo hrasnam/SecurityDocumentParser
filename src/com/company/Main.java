@@ -35,7 +35,7 @@ public class Main {
     private static final JSONObject jsonOther= new JSONObject();
 
     public static void main(String[] args) throws Exception { // Mikita
-        //inputArgumentsExecutor(inputTest());
+//        inputArgumentsExecutor(inputTest());
         inputArgumentsExecutor(args);
         exportToJSON();
     }
@@ -55,7 +55,9 @@ public class Main {
             stringBuilder.append(ls);
             i++;
         }
-        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        if (stringBuilder.length() > 0) {
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        }
         reader.close();
         return stringBuilder.toString();
     }
@@ -129,53 +131,68 @@ public class Main {
         });
     }
 
-    private static void findBibliography()  { //Kunal
-//        int startingLine = 0, endingLine = 0, temp = 0;
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-//        for (int i = 1; i < numberOfLines + 1; ++i) {
-//            String currentLine = reader.readLine();
-//            Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)");
-//            Matcher matcher = pattern.matcher(currentLine);
-//
-//            while (matcher.matches()) {
-//                startingLine = i;
-//                break;
-//            }
-//        }
-//        BufferedReader reader2 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-//        String currentLineN = "";
-//        for (int i = 1; i < numberOfLines + 1; ++i) {
-//            currentLineN = reader2.readLine();
-//            Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)|(INDEX)");
-//            Matcher matcher = pattern.matcher(currentLineN);
-//            while (matcher.find()) {
-//                temp = i;
-//                currentLineN = reader2.readLine();
-//                break;
-//            }
-//        }
-//        String[] nextHeading = currentLineN.split(" ");
-//        String nextFindHeading = nextHeading[0];
-//
-//        BufferedReader reader3 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-//        for (int i = 1; i < numberOfLines + 1; ++i) {
-//            String currentLine = reader3.readLine();
-//            Pattern pattern = Pattern.compile(nextFindHeading);
-//            Matcher matcher = pattern.matcher(currentLine);
-//
-//            while (matcher.matches() && temp != i) {
-//                endingLine = i;
-//                break;
-//            }
-//        }
-//
-//        BufferedReader reader4 = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
-//        for (int i = 1; i < numberOfLines + 1; ++i) {
-//            String currentLine = reader4.readLine();
-//            while (i >= startingLine && i < endingLine) {
-//                System.out.println(currentLine);
-//            }
-//        }
+    private static void findBibliography() throws IOException { //Kunal
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
+        Pattern pattern = Pattern.compile("[A-Z1-9]+.*\\s(Bibliography[^.]*)|(BIBLIOGRAPHY[^.]*)");
+        Pattern endPattern = Pattern.compile("^[\\s\\S]*?(?=\\n\\n)");
+        Pattern bibliographyEntriesPattern = Pattern.compile("\\s+\\[[0-9]+\\].+(?!\\[[1-9]+\\])");
+        int i = 1;
+
+        do {
+            for (; i < numberOfLines + 1; ++i) {
+                String currentLine = reader.readLine();
+                Matcher matcher = pattern.matcher(currentLine);
+                if (matcher.find()) {
+                    break;
+                }
+            }
+
+            int maxContentsLines = 500;
+            if (i + maxContentsLines > numberOfLines) {
+                maxContentsLines = numberOfLines - i - 1;
+            }
+            if (i + maxContentsLines <  numberOfLines) {
+                String searchString = getSearchString(inputFile, i);
+                searchString = searchString.replaceAll("\\n{2,}", "--- new lines ---");
+                searchString = searchString.replace("\n", " ");
+                searchString = searchString.replaceAll(" +", " ");
+                Matcher matcher = bibliographyEntriesPattern.matcher(searchString);
+                if (matcher.find()) {
+                    ArrayList<String> entries = parseBibliography(matcher.group());
+                    for (int index = 0; index < entries.size(); index++) {
+                        String tag = entries.get(index);
+                        String value = entries.get(++index);
+                        value = value.replace("--- new lines ---", "");
+                        jsonBibliography.put(tag, value);
+                    }
+                    break;
+                }
+
+            }
+        } while (true);
+
+    }
+
+    private static ArrayList<String> parseBibliography(String content) {
+        ArrayList<String> result = new ArrayList<>();
+        String[] entries;
+        entries = content.split("(?=\\[[0-9a-zA-Z]+\\])");
+        for (String line : entries) {
+            String[] parts = line.split("(?<=\\])");
+            for (String part : parts) {
+                result.add(part);
+            }
+        }
+        if (result.size() > 0 && result.get(0).equals(" ")) {
+            result.remove(0);
+        }
+        if (result.size() > 0) {
+            String lastLine = result.get(result.size()-1);
+            result.remove(result.size()-1);
+            String parts[] = lastLine.split("(--- new lines ---)");
+            result.add(parts[0]);
+        }
+        return result;
     }
 
     private static void findTableOfContents() throws Exception { // Marek
@@ -281,11 +298,11 @@ public class Main {
         Pattern pattern = Pattern.compile("[ \\w-]+\\.");
         Matcher matcher = pattern.matcher(inputFile.getName());
         String jsonFileName;
-        String additionalPath = "output/";
+
         if(matcher.find()){
-            jsonFileName = additionalPath + matcher.group() + "json";
+            jsonFileName = matcher.group() + "json";
         } else {
-            jsonFileName = additionalPath + "output.json";
+            jsonFileName = "output.json";
         }
         FileWriter file = new FileWriter(jsonFileName);
 
