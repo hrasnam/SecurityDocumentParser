@@ -162,7 +162,7 @@ public class Main {
                     for (int index = 0; index < entries.size()-1; index++) {
                         String tag = entries.get(index);
                         String value = entries.get(++index);
-                        tag = value.replace("--- new lines ---", "");
+                        tag = tag.replace("--- new lines ---", "");
                         value = value.replace("--- new lines ---", "");
                         jsonBibliography.put(tag, value);
                     }
