@@ -86,6 +86,8 @@ public class Main {
 
         if (!matches.isEmpty()) {
             String result = matches.get(0);
+            String parts[] = result.split("\\n{3,}");
+            result = parts[0];
             result = result.replaceAll("[ ]+", " ");
             result = result.replaceAll("[\\s|\\t\\r\\n]+", " ").trim();
             titleStringToJson = result;
