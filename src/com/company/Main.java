@@ -14,10 +14,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
-    static File inputFile = null;
+    private static File inputFile = null;
 
-    static int numberOfLines = 0;
-    static ArrayList<File> files = new ArrayList<>();
+    private static int numberOfLines = 0;
+    private static final ArrayList<File> files = new ArrayList<>();
 
     private static boolean toFindTitle = false;
     private static boolean toFindTableOfContents = false;
@@ -35,7 +35,9 @@ public class Main {
     private static final JSONObject jsonOther= new JSONObject();
 
     public static void main(String[] args) throws Exception { // Mikita
+        //inputArgumentsExecutor(inputTest());
         inputArgumentsExecutor(args);
+        exportToJSON();
     }
 
     private static String getSearchString(File inputFile, int startLine) throws IOException {
@@ -62,8 +64,6 @@ public class Main {
         Map<String, String> patternMap = new HashMap<>();
         patternMap.put("title1", "^[\\s\\S]*?(?=\\bSecurity Target Lite\\b)");
         patternMap.put("title2", "^[\\s\\S]*?(?=\\bfrom\\b)");
-        //add more cases
-        //max first 40 lines
         ArrayList<String> matches = new ArrayList<>();
         patternMap.forEach((key, value) -> {
             Pattern pattern = Pattern.compile(value);
@@ -147,7 +147,6 @@ public class Main {
 //        for (int i = 1; i < numberOfLines + 1; ++i) {
 //            currentLineN = reader2.readLine();
 //            Pattern pattern = Pattern.compile("(Bibliography)|(BIBLIOGRAPHY)|(INDEX)");
-//            //TODO ERROR
 //            Matcher matcher = pattern.matcher(currentLineN);
 //            while (matcher.find()) {
 //                temp = i;
@@ -211,8 +210,7 @@ public class Main {
         result = result.replaceAll("[.]{2,}", "@"); //replace 2+ dots with a single space
         result = result.replaceAll("[ ]+", " ").trim(); //replace multiple spaces by one space
         result = result.replaceAll("\\n\\s", "\n");
-//        result = result.replaceAll("[\\s|\\t|\\r\\n]+", " ").trim();
-//        System.out.println(result);
+        result = result.replaceAll("[\\s|\\t\\r\\n]+", " ").trim();
         String[]lines = result.split("\\n");
         StringBuilder finalEntry = new StringBuilder("[");
         for (String line : lines) {
@@ -228,7 +226,7 @@ public class Main {
                 String entry = "[\"" + id + "\", \"" + name + "\", " + pageNumber + "],";
                 finalEntry.append(entry);
             } catch (NumberFormatException e) {
-                //e.printStackTrace();
+                System.err.println("Error: Table of content, number format exception.");
             }
         }
 
@@ -283,10 +281,11 @@ public class Main {
         Pattern pattern = Pattern.compile("[ \\w-]+\\.");
         Matcher matcher = pattern.matcher(inputFile.getName());
         String jsonFileName;
+        String additionalPath = "output/";
         if(matcher.find()){
-            jsonFileName = matcher.group() + "json";
+            jsonFileName = additionalPath + matcher.group() + "json";
         } else {
-            jsonFileName = "output.json";
+            jsonFileName = additionalPath + "output.json";
         }
         FileWriter file = new FileWriter(jsonFileName);
 
@@ -469,5 +468,65 @@ public class Main {
             }
             return count == 0 ? 1 : count;
         }
+    }
+
+    private static String[] inputTest(){
+        return new String[]{
+                "./InputFiles/[ST-Lite-EAC]_(v1.1)_2018_2000036361_-_Security_Target_Lite_IDeal_Pass_v2.3-n_(SAC_EAC_Polymorphic).txt",
+                "./InputFiles/[ST-Mercury]_Security_Target_Mercury_v3.5.txt",
+                "./InputFiles/0782V5b_pdf.txt",
+                "./InputFiles/0879V4a_pdf.txt",
+                "./InputFiles/0939V3b_pdf.txt",
+                "./InputFiles/0945V3a_pdf.txt",
+                "./InputFiles/0961V3a_pdf.txt",
+                "./InputFiles/0977V2a_pdf.txt",
+                "./InputFiles/0977V2b_pdf.txt",
+                "./InputFiles/1019V2b_pdf.txt",
+                "./InputFiles/1022a_pdf.txt",
+                "./InputFiles/1022b_pdf.txt",
+                "./InputFiles/1025V3a_pdf.txt",
+                "./InputFiles/1040b_pdf.txt",
+                "./InputFiles/1051a_pdf.txt",
+                "./InputFiles/1059b_pdf.txt",
+                "./InputFiles/1072a_pdf.txt",
+                "./InputFiles/1086b_pdf.txt",
+                "./InputFiles/1098a_pdf.txt",
+                "./InputFiles/1102a_pdf.txt",
+                "./InputFiles/1105b_pdf.txt",
+                "./InputFiles/1107a_pdf.txt",
+                "./InputFiles/1107b_pdf.txt",
+                "./InputFiles/1110V2a_pdf.txt",
+                "./InputFiles/1110V3b_pdf.txt",
+                "./InputFiles/1126a_pdf.txt",
+                "./InputFiles/1126b_pdf.txt",
+                "./InputFiles/anssi-cible-cc-2020_72en.txt",
+                "./InputFiles/Certification_Report_NSCIB-CC-67206-CR4.1.txt",
+                "./InputFiles/Certification_Report_NSCIB-CC-200689-CR.txt",
+                "./InputFiles/Certification_Report_NSCIB-CC-200736-CR.txt",
+                "./InputFiles/certification-report-nscib-cc-180212-cr2.txt",
+                "./InputFiles/NSCIB-CC_0075541-ST.txt",
+                "./InputFiles/NSCIB-CC-0011955-CR.txt",
+                "./InputFiles/NSCIB-CC-0023577-CR2-1.0.txt",
+                "./InputFiles/NSCIB-CC-0075446-CRv2.txt",
+                "./InputFiles/NSCIB-CC-0095534-CR.txt",
+                "./InputFiles/NSCIB-CC-0095534-STLite.txt",
+                "./InputFiles/NSCIB-CC-0112113-CR.txt",
+                "./InputFiles/NSCIB-CC-0145426-ST_rev_C-final.txt",
+                "./InputFiles/NSCIB-CC-0145427-CR.txt",
+                "./InputFiles/NSCIB-CC-156530_3-STv3.2.txt",
+                "./InputFiles/NSCIB-CC-156530-CR3.txt",
+                "./InputFiles/NSCIB-CC-217812-CR2.txt",
+                "./InputFiles/nscib-cc-0229285-creac.txt",
+                "./InputFiles/nscib-cc-0229285eac-stv1.2.txt",
+                "./InputFiles/nscib-cc-0229286sscdkeygen-stv1.2.txt",
+                "./InputFiles/NSCIB-CC-0229287-CR_(SSCD-IMP)_NO_eIDAS.txt",
+                "./InputFiles/NSCIB-CC-0229287(SSCDkeyImp)-STv1.2.txt",
+                "./InputFiles/example1.txt",
+                "./InputFiles/example2.txt",
+                "./InputFiles/Mikita1.txt",
+                "./InputFiles/Mikita2.txt",
+                "./InputFiles/SecurityTargetLite_MF2DL_MF2ID_NTAG42x(Tf)_v1.0.txt",
+                "--all"
+        };
     }
 }
