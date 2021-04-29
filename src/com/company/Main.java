@@ -197,7 +197,6 @@ public class Main {
     }
 
     private static void findTableOfContents() throws Exception { // Marek
-        //TODO
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
         Pattern pattern = Pattern.compile("(Contents)|(CONTENTS)|(INDEX)");
         Pattern pattern2 = Pattern.compile("^[\\s\\S]*?(?=\\n\\n)");
