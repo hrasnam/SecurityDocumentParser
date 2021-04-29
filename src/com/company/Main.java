@@ -86,7 +86,7 @@ public class Main {
 
         if (!matches.isEmpty()) {
             String result = matches.get(0);
-            String parts[] = result.split("\\n{3,}");
+            String[] parts = result.split("\\n{3,}");
             result = parts[0];
             result = result.replaceAll("[ ]+", " ");
             result = result.replaceAll("[\\s|\\t\\r\\n]+", " ").trim();
@@ -136,7 +136,7 @@ public class Main {
     private static void findBibliography() throws IOException { //Kunal
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));
         Pattern pattern = Pattern.compile("[A-Z1-9]+.*\\s(Bibliography[^.]*)|(BIBLIOGRAPHY[^.]*)");
-        Pattern endPattern = Pattern.compile("^[\\s\\S]*?(?=\\n\\n)");
+//        Pattern endPattern = Pattern.compile("^[\\s\\S]*?(?=\\n\\n)");
         Pattern bibliographyEntriesPattern = Pattern.compile("\\s+\\[[0-9]+\\].+(?!\\[[1-9]+\\])");
         int i = 1;
 
@@ -182,9 +182,7 @@ public class Main {
         entries = content.split("(?=\\[[0-9a-zA-Z]+\\])");
         for (String line : entries) {
             String[] parts = line.split("(?<=\\])");
-            for (String part : parts) {
-                result.add(part);
-            }
+            Collections.addAll(result, parts);
         }
         if (result.size() > 0 && result.get(0).equals(" ")) {
             result.remove(0);
@@ -192,7 +190,7 @@ public class Main {
         if (result.size() > 0) {
             String lastLine = result.get(result.size()-1);
             result.remove(result.size()-1);
-            String parts[] = lastLine.split("(--- new lines ---)");
+            String[] parts = lastLine.split("(--- new lines ---)");
             result.add(parts[0]);
         }
         return result;
